@@ -1,0 +1,21 @@
+<h1>Listing hit_lists</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hit_lists.each do |hit_list| %>
+  <tr>
+    <td><%= link_to 'Show', hit_list %></td>
+    <td><%= link_to 'Edit', edit_hit_list_path(hit_list) %></td>
+    <td><%= link_to 'Destroy', hit_list, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hit list', new_hit_list_path %>

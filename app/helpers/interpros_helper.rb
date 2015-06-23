@@ -1,0 +1,2 @@
+module InterprosHelper
+end

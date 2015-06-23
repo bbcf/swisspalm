@@ -1,0 +1,21 @@
+<h1>Listing homologues</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @homologues.each do |homologue| %>
+  <tr>
+    <td><%= link_to 'Show', homologue %></td>
+    <td><%= link_to 'Edit', edit_homologue_path(homologue) %></td>
+    <td><%= link_to 'Destroy', homologue, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Homologue', new_homologue_path %>

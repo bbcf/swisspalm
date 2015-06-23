@@ -1,0 +1,144 @@
+
+<% total_lines = 0 %>
+<%= @hits.size %> hits (of <%= @protein_count1 %> proteins) and <%= Site.count %> sites (on <%= @protein_count2 %> proteins) found.
+
+<table id ='list_hits'>
+<thead>
+  <tr>
+    <th>#</th>	
+    <th>Hit ID</th>
+    <th>Organism</th>
+    <th>Protein / Isoform</th>
+    <th>Article</th>
+    <th>Study</th> 
+<!--  <th>Cell type</th>
+    <th>Subcellular fraction</th>
+    <th>Study techniques</th>-->
+    <th># hits in palmitoyl-proteomes</th>
+    <th>Site ID</th>
+    <th>Position (<sup>*</sup>uncertain)</th>
+    <th>PATs (<sup>*</sup>at hit level only)</th>
+    <th>Site techniques</th>
+    <th>Hit curator</th>
+    <th>Site curator</th>
+    <th>Updated</th>
+  <% if admin? %>
+    <th></th>
+  <% end %>
+  </tr>
+</thead>
+<tbody>
+<% count = 1 %>
+<% @hits.each do |hit| %>
+<% protein = hit.protein %>
+<% study = hit.study %>
+<% sites = hit.sites %>
+<% if sites.size > 0 %>
+<% total_lines += sites.size %>
+<% sites.each do |site| %>
+  <tr>
+<td><%= count %></td>
+<td>SPalmH:<%= hit.id %><br/><%= link_to('Destroy', hit, method: :delete, data: { confirm: 'Are you sure?' }) if admin? %></td>
+<td><%= ( protein.organism) ? protein.organism.name : 'NA' %></td>
+<td><%= link_to(protein.up_id, protein_path(protein)) +  " Isoform " + ((hit.isoform_id) ? hit.isoform.isoform.to_s : 'NA') %></td>
+<td><%= link_to (study.authors + " (#{study.year})"), ('http://www.ncbi.nlm.nih.gov/pubmed/' + study.pmid.to_s) %></td>
+<td>
+
+<table></tr>
+<td>Organism:</td><td><%= (study.organism) ? study.organism.name : 'NA' %></td>
+</tr><tr>
+<td>Cell type:</td><td><%= (study.cell_type) ? study.cell_type.name : 'NA' %></td>
+</tr><tr>
+<td>Subcell:</td><td><%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %></td>
+</tr><tr>
+<td>Techniques:</td><td><%= raw study.techniques.map{|t| t.name}.join('<br/>') %></td>
+</td>
+</tr></table>
+
+</td>
+
+<td><%= protein.hits.select{|h| h.study.large_scale == true}.size %> <%# link_to 'See details', hits_path() %></td>
+<td>SPalmS:<%= site.id %></td>
+<td><%= raw site.pos.to_s + ((site.uncertain_pos) ? "<sup>*</sup>" : "") %></td>
+<td><%= (site.reactions.size > 0) ? (raw site.reactions.map{|r| link_to r.protein.up_id, protein_path(r.protein) }.join(", ")) : 
+((hit.reactions.size > 0) ? raw(hit.reactions.map{|r| link_to(r.protein.up_id, protein_path(r.protein))}.join(", ") +  "<sup>*</sup>") : '') %></td>
+<td><%= raw site.techniques.map{|t| t.name}.join('<br/>') %></td>
+<td><%= (hit.curator_id) ? User.find(hit.curator_id).initials : 'Auto' %></td>
+<td><%= (site.curator_id) ? User.find(site.curator_id).initials : 'Auto' %></td>
+<td><%= raw display_date(site.updated_at) %></td>
+<% if admin? %>
+<td><%= link_to 'Edit', meta_edit_sites_path({:hit_id => hit.id, :site_id => site.id}) %></td>
+<% end %>
+  </tr>
+<% count+=1 %>
+<% end %>
+<% else %>
+<% total_lines += 1%>
+  <tr>
+<td><%= count %></td>
+<td>SPalmH:<%= hit.id %><br/><%= link_to('Destroy', hit, method: :delete, data: { confirm: 'Are you sure?' }) if admin? %></td>
+<td><%= (protein.organism) ? protein.organism.name : 'NA' %></td>
+<td><%= link_to(protein.up_id, protein_path(protein)) +  " Isoform " + ((hit.isoform_id) ? hit.isoform.isoform.to_s : 'NA') %></td>
+<td><%= link_to (study.authors + " (#{study.year})"), ('http://www.ncbi.nlm.nih.gov/pubmed/' + study.pmid.to_s) %></td>
+<td>
+
+<table></tr>
+<td>Organism:</td><td><%= (study.organism) ? study.organism.name : 'NA' %></td>
+</tr><tr>
+<td>Cell type:</td><td><%= (study.cell_type) ? study.cell_type.name : 'NA' %></td>
+</tr><tr>
+<td>Subcell:</td><td><%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %></td>
+</tr><tr>
+<td>Techniques:</td><td><%= raw study.techniques.map{|t| t.name}.join('<br/>') %></td>
+</td>
+</tr></table>
+
+</td>
+<td><%= protein.hits.select{|h| h.study.large_scale == true}.size %> <%# link_to 'See details', hits_path() %></td>
+<td>NA</td>
+<td>NA</td>
+<td><%= val = hit.reactions.map{|r| link_to(r.protein.up_id, protein_path(r.protein)) }.join(", "); raw ((val != '') ? (val +  "<sup>*</sup>") : '') %></td>
+<td>NA</td>
+<td><%= (hit.curator_id) ? User.find(hit.curator_id).initials : 'Auto'  %></td>
+<td>NA</td>
+<td><%= raw display_date(hit.updated_at) %></td>
+<% if admin? %> 
+<td><%= link_to 'Edit', meta_edit_sites_path({:hit_id => hit.id}) %></td>
+<% end %>
+
+</tr>
+<% count +=1 %>
+<% end %>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+	"fnDrawCallback": function ( oSettings ) {
+			/* Need to redo the counters if filtered or sorted */
+			if ( oSettings.bSorted || oSettings.bFiltered )
+			{
+				for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+				{
+					jQuery('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+				}
+			}
+		},
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+        "iDisplayLength": <%= total_lines %>
+        })
+});
+
+
+//]]>
+</script>

@@ -1,0 +1,21 @@
+<h1>Listing gene_names</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @gene_names.each do |gene_name| %>
+  <tr>
+    <td><%= link_to 'Show', gene_name %></td>
+    <td><%= link_to 'Edit', edit_gene_name_path(gene_name) %></td>
+    <td><%= link_to 'Destroy', gene_name, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Gene name', new_gene_name_path %>

@@ -1,0 +1,65 @@
+<% if @h_res %>
+<table id='stats' class='jquery'>
+<thead>
+<tr>
+<th>PTMs</th>
+<th># of all proteins</th>
+<th># of palmitoylated proteins</th>
+<th>% of palmitoylated proteins over all proteins having the feature</th>
+<th>% of palmitoylated proteins over all palmitoylated proteins </th>
+<% if @dataset != 'validated' %>
+<th># of palmitoylated proteins across all palmitomes</th>
+<th>% of palmitoylated proteins across all palmitomes over all proteins having the feature</th>
+<th>% of palmitoylated proteins across all palmitomes over all palmitoylated proteins</th>
+<% end %>
+<th># of proteins predicted to be palmitoylated</th>
+<th>% of proteins predicted to be palmitoylated over all proteins having the feature</th>
+<th>% of proteins predicted to be palmitoylated over all palmitoylated proteins</th>
+<th># of transmembrane proteins</th>
+<th># of palmitoylated transmembrane proteins</th>
+<th>% of palmitoylated transmembrane proteins having this feature (over all transmembrane proteins palmitoylated)</th>
+</tr></thead>
+<tbody>
+
+<% @h_res.each_key do |list_sl_names| %>
+<tr>
+<td><%= list_sl_names.join(", ") %></td>
+<td><%= @h_res[list_sl_names][:nber_all_prot] %></td>
+<td><%= @h_res[list_sl_names][:nber_palm_prot] %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_prot].to_f * 100 / @h_res[list_sl_names][:nber_all_prot]).to_i %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_prot].to_f * 100 / @h_res2[:nber_palm_prot]).to_i %></td>
+<% if @dataset != 'validated' %>
+<td><%= @h_res[list_sl_names][:nber_palm_prot_ortho] %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_prot_ortho].to_f * 100 / @h_res[list_sl_names][:nber_all_prot]).to_i %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_prot_ortho].to_f * 100 / @h_res2[:nber_palm_prot_ortho]).to_i %></td>
+<% end %>
+<td><%= @h_res[list_sl_names][:nber_palm_predicted_prot] %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_predicted_prot].to_f * 100 / @h_res[list_sl_names][:nber_all_prot]).to_i %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_predicted_prot].to_f * 100 / @h_res2[:nber_palm_prot_pred]).to_i %></td>
+<td><%= @h_res[list_sl_names][:nber_tm_prot] %></td>
+<td><%= @h_res[list_sl_names][:nber_palm_tm_prot] %></td>
+<td><%= (@h_res[list_sl_names][:nber_palm_tm_prot].to_f * 100 / @h_res2[:nber_palm_tm_prot]).to_i %></td>
+</tr>
+<% end %>
+</tbody></table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#stats').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+        "iDisplayLength": <%= @h_res.keys.size %>
+        })
+});
+
+
+//]]>
+</script>
+
+<% end %>

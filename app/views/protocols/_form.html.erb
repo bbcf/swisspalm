@@ -1,0 +1,30 @@
+<%= form_for(@protocol) do |f| %>
+  <% if @protocol.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@protocol.errors.count, "error") %> prohibited this protocol from being saved:</h2>
+
+      <ul>
+      <% @protocol.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr>
+<td>Name</td>
+<td><%= f.text_field :name %></td>
+</tr><tr>
+<td>Description</td>
+<td><%= f.text_area :description %></td>
+</tr><tr>
+<td>File</td>
+<td><%= f.file_field :file %></td>
+</tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

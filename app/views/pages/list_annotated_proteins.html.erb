@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<h1>List of palmitoylated proteins</h1>
+
+<table><tr><td>
+<b>Filters</b>
+<table><tr><td>
+<% l = @organisms.map{|o| [o.name, o.id]}.sort %>
+Reference organism
+</td><td>
+  <%= select_tag :ref_organism_id, options_for_select(l, params[:ref_organism_id]), {} %>
+</td></tr>
+</table>
+</td><td>
+<%= link_to_function 'Update', 'update_list()' %> | <%= link_to_function 'Download', 'download_txt()' %>
+</td></tr></table>
+<br/>
+
+

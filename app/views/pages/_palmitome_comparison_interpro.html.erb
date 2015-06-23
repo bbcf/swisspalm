@@ -1,0 +1,56 @@
+<%= @protein_ids_by_interpro_id.keys.size %> InterPro profiles.
+
+<%# @nber_prot_by_interpro_id.to_json %>
+
+<table id='results'>
+<thead>
+<th>#</th>
+<th>InterPro ID</th>
+<th>InterPro description</th>
+<th>List of palmitoylated proteins</th>
+<th># of palmitoylated proteins</th>
+
+<th>% of all proteins matching this profile</th>
+</thead>
+<tbody>
+<% @protein_ids_by_interpro_id.each_key do |interpro_id| %>
+<tr>
+<td>0</td>
+<td><%= interpro_id %></td>
+<td><%= @h_interpro_desc[interpro_id] %></td>
+
+<td><%=  @protein_ids_by_interpro_id[interpro_id].map{|pid| @h_proteins[pid].up_id}.join(", ") %></td>
+<td><%=  @protein_ids_by_interpro_id[interpro_id].size %></td>
+<td>
+<%= @protein_ids_by_interpro_id[interpro_id].size.to_f*100/@nber_prot_by_interpro_id[interpro_id] %>
+</td></tr>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#results').dataTable( {
+         "fnDrawCallback": function ( oSettings ) {
+                  if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                                for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+                                {
+                                        jQuery('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                                }
+                        }
+                },
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+//        "aaSorting": [[ <%= @h_sel_studies.keys.size + 6 %>, "desc" ]],
+        "iDisplayLength": <%= @protein_ids_by_interpro_id.keys.size %>
+        })
+});
+
+//]]>
+</script>

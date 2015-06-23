@@ -1,0 +1,17 @@
+<%= form_for(@protein_go_association) do |f| %>
+  <% if @protein_go_association.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@protein_go_association.errors.count, "error") %> prohibited this protein_go_association from being saved:</h2>
+
+      <ul>
+      <% @protein_go_association.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

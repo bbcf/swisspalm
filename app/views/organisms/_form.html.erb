@@ -1,0 +1,48 @@
+<%= form_for(@organism) do |f| %>
+  <% if @organism.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organism.errors.count, "error") %> prohibited this organism from being saved:</h2>
+
+      <ul>
+      <% @organism.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+<tr>
+<td>Name</td>
+<td><%= f.text_field :name %></td>
+</tr>
+<tr>
+<td>Short name</td>
+<td><%= f.text_field :shortname %></td>
+</tr>
+<tr>
+<td>Common name</td>
+<td><%= f.text_field :common_name %></td>
+</tr>
+<tr>
+<td>Uniprot tag</td>
+<td><%= f.text_field :up_tag %></td>
+</tr>
+<tr>
+<td>TaxID</td>
+<td><%= f.text_field :taxid %></td>
+</tr>
+<tr>
+<td>URL part for GO</td>
+<td><%= f.text_field :go_url_part %></td>
+</tr>
+<tr>
+<td>Ensembl assembly</td>
+<td><%= f.text_field :ensembl_assembly %></td>
+</tr>
+</table>	
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

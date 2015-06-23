@@ -1,0 +1,42 @@
+<h1>Listing data_types</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Tag</th>
+    <th>URLs</th>
+    <th>obj</th>
+    <th>id field</th>
+    <th>name field</th>
+    <th>condition</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @data_types.each do |data_type| %>
+  <tr>
+    <td><%= data_type.id %></td>
+    <td><%= data_type.name %></td>
+    <td><%= data_type.description %></td>
+    <td><%= data_type.tag %></td>
+    <td><%= (data_type.url_link != '') ? (link_to data_type.url_link, data_type.url_link) : 'No url_link' %>
+<br/>
+<%= (data_type.url_download != '') ? (link_to data_type.url_download, data_type.url_download) : 'No url_download' %></td>
+<td><%= data_type.obj %></td>
+<td><%= data_type.id_field %></td>
+<td><%= data_type.name_field %></td>
+<td><%= data_type.condition %></td>
+
+    <td><%= link_to 'Show', data_type %></td>
+    <td><%= link_to 'Edit', edit_data_type_path(data_type) %></td>
+    <td><%= link_to 'Destroy', data_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Data type', new_data_type_path %>

@@ -1,0 +1,16 @@
+<% @include_js = javascript_include_tag 'jsphylosvg-1.55/raphael.js' %>
+<% @include_js += javascript_include_tag 'jsphylosvg-1.55/jsphylosvg-min.js' %>
+
+<div id="mygraph"></div>
+
+<script type="text/javascript">
+
+window.onload = function(){
+	            var dataObject = { newick: '<%= raw @data_newick %>' };
+	            phylocanvas = new Smits.PhyloCanvas(
+	                dataObject,
+	                'mygraph',
+	                1200, 2000
+	            );
+	    };
+</script>

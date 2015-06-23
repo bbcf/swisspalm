@@ -1,0 +1,23 @@
+<h1>List of palmitoylation sites</h1>
+
+<table>
+  <tr>
+    <th>Study</th>
+    <th>Protein</th>
+    <th>Position</th>
+    <th>Transferase</th>
+    <th>Requires modification</th>
+  </tr>
+
+<% @hit_sites.each do |hit_site| %>
+  <tr>
+    <td><%= link_to 'Show', hit_site %></td>
+    <td><%= link_to 'Edit', edit_hit_site_path(hit_site) %></td>
+    <td><%= link_to 'Destroy', hit_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hit site', new_hit_site_path %>

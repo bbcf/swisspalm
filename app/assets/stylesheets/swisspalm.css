@@ -1,0 +1,372 @@
+#main_table {width:100%}
+#main_table tr td {vertical-align:top}
+
+th {padding-right:15px}
+
+.title {
+color: #34CBB7;
+cursor:pointer
+}
+
+h1 {font-size:16px; color:#1E7368; border-bottom: 2px solid #f5f1d8; padding:.5em}
+h1 a {color:#1E7368}
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+.general_prot_info {}
+.general_prot_info tr {text-align: left}
+.general_prot_info tr th {font-weight:normal; font-style:italic}
+.general_prot_info tr td {padding-right: 5em; vertical-align:top}
+
+
+#legend{
+position:fixed;
+top:200px;
+right:0px;
+}
+
+#legend td.first_col {width:20px;}
+#legend td.second_col {background-color:white}
+
+#prot_search_options {}
+#prot_search_options tr {height:20px}
+#prot_search_options tr td {height:20px}
+.search_home {
+/*height:50px;*/
+border-collapse:collapse;
+border:0px;
+width:100%
+}
+
+.search_home tr {height:50px}
+
+.search_home td > div.search_container { width: 100%; height: 100%; overflow:hidden; }
+.search_home td {height:50px;vertical-align:top;}
+
+#search_input { padding-top: 2px; padding-right:2px; width:438px}
+
+#search_input input{
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #888888;
+    font-size: 14px;
+    outline: 1px solid #EEEEEE;
+    padding: 5px;
+    border:0px;
+    width: 600px;
+    height: 20px
+}
+
+#search_input_main {width:620px; border: 1px solid #EEEEEE}
+
+#search_input_main input{
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #888888;
+    font-size: 20px;
+/*    outline: 1px solid #EEEEEE; */
+    padding: 11px;
+    border:0px;
+    width:565px;
+    margin-right:55px
+}
+
+
+#search_input input:focus{
+    outline: 1px solid #EEEEEE;
+}
+
+#div_search {
+	width:5em; 
+	padding:15px;
+	text-align:center; 
+	font-size: 23px;
+	border:1px solid #3DE6CF;
+	color:#1E7368;
+	cursor:pointer;
+border-radius:7px;
+    background:#34CBB7;
+    background: linear-gradient( #3DE6CF, #34CBB7);
+    background: -webkit-linear-gradient( #3DE6CF, #34CBB7);
+    background: -moz-linear-gradient( #3DE6CF, #34CBB7);
+    background: -ms-linear-gradient( #3DE6CF, #34CBB7);
+    background: -o-linear-gradient( #3DE6CF, #34CBB7);
+    background: linear-gradient( #3DE6CF, #34CBB7)
+}
+#div_search:hover {
+    color:#1E7368;
+    background: #36D0BC;
+    background: -webkit-linear-gradient( #41F5DD, #36D0BC);
+    background: -moz-linear-gradient( #41F5DD, #36D0BC);
+    background: -ms-linear-gradient( #41F5DD, #36D0BC);
+    background: -o-linear-gradient( #41F5DD, #36D0BC);
+    background: linear-gradient( #41F5DD, #36D0BC);
+}
+
+#protein_cart {font-size:.9em; background-color:#dddddd; color:#4488ee; position:fixed; z-index:1000; bottom:0px;width:100%; padding:.2em}
+#protein_cart a.del {color:#cc88ee}
+
+#protein_cart div.action {float:right;top:0px;padding-right:2em}
+
+.std_table {border-collapse:collapse;border:0px;background-color:#efefef}
+
+/*
+#list_proteins {border-collapse:collapse;border:0px}
+#list_proteins tr th{border-bottom:2px solid black; cursor:pointer}
+#list_proteins tr td{background-color:white; border-bottom:1px solid black}
+*/
+
+.protein_table {border-collapse:collapse;border:0px;width:100%}
+.protein_table tr th{border-bottom:2px solid black; cursor:pointer; border-top:2px solid black}
+.protein_table tr td{background-color:white; border-bottom:1px solid black}
+
+.center {text-align:center}
+
+#list_studies tr td{font-size:10px}
+#list_studies tr td.center {text-align:center}
+#list_studies tr th{cursor:pointer}
+
+
+#study_table td{vertical-align:top}
+#study_table td.title {font-weight:bold; width:15em} 
+
+.pat_table table {border-collapse:collapse;border:0px}
+.pat_table td{vertical-align:top}
+
+.unreviewed {
+    background: url("/assets/reviewAndunReviewed.png") no-repeat scroll 0 -16px rgba(0, 0, 0, 0);
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+.reviewed {
+    background: url("/assets/reviewAndunReviewed.png") no-repeat scroll 0 0 rgba(0, 0, 0, 0);
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
+
+/* from flygut */
+
+table.index {}
+table.index tr td {padding: .5em}
+
+div.display {position:relative;bottom:100px;left:100px;color:white;font: 3em arial,sans serif;}
+.hidden {display:none}
+
+#histo_photos tr td {
+vertical-align:top
+}
+
+table#expression_data tr td{
+vertical-align:top
+}
+table#expression_data tr td.first{
+width:20em
+}
+
+#expression_data_types li {
+font-weight:bold;
+}
+
+#popup_regions_index {font-size:9px}
+#popup_regions_index table {border-collapse:collapse} 
+#popup_regions_index table tr td {font-size:9px;padding:0em;border:0em;margin:0em}
+
+.round_border {;border-radius: 10px;}
+
+table#overview {border-collapse:collapse;border:0px;background-color:#efefef}
+table#overview tr td {padding:1em}
+
+div#introduction {padding:1em; border-color:#990099; color:#990099; background-color:#fffaff}
+
+#menu{ background-color:#f5f1d8;  font-size:16px;}
+a.section_tab { line-height:2.5em; white-space:nowrap; text-decoration:none; background-color: #F5F1D8; color: #000055;  padding:.3em; border-radius:7px; border:2px solid #F5F1D8 }
+a.section_tab:visited {}
+a.section_tab:hover { background-color:#f5f1d8; color:#b52735 }
+
+#submenu{border-bottom: 3px solid #f5f1d8 }
+a.subsection_tab { line-height:2em; white-space:nowrap; text-decoration:none; color: #888888;  padding:.2em;  }
+a.subsection_tab:visited {}
+a.subsection_tab:hover { color: #b52735}
+
+a.sel_tab { background-color:#f5f1d8; color:#b52735 }
+a.sel_tab2 {color:#b52735  }
+
+a.image_link {padding:12px; padding-top:0px;background-repeat: no-repeat;}
+
+a.external {
+    background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVElEQVR42n3PgQkAIAhEUXdqJ3dqJ3e6IoTPUSQcgj4EQ5IlUiLE0Jil3PECXhcHGBhZ8kg4hwxAu3MZeCGeyFnAXp4hqNQPnt7QL0nADpD6wHccLvnAKksq8iiaAAAAAElFTkSuQmCC");
+    background-position: right center;
+    background-repeat: no-repeat;
+    padding-right: 13px;
+}
+
+#loading{position:fixed;height:100%;width:100%;z-index:10000;text-align:center; background-color:rgba(220, 220, 220, 0.5)}
+
+#loading:before {    /* create a full-height inline block pseudo=element */
+    content: ' ';
+    display: inline-block;
+    vertical-align: middle;  /* vertical alignment of the inline element */
+    height: 100%;
+}
+
+#loading img{
+//margin: auto;
+vertical-align: middle;
+height: 100px;
+width:100px
+}
+
+.bold {font-weight:bold}
+.hc {color:green}
+.mc {color:orange}
+.lc {color:red}	
+.not_predicted {color:grey}
+.not_validated {color:purple}
+/*#isoform_sequences {overflow:scroll}*/
+
+.nowrap{white-space:nowrap}
+
+.small{font-size:9px}
+
+a.image_link {padding:12px; padding-top:0px;background-repeat: no-repeat;}
+a.pdf_image {display:inline-block; width:30px; height:33px;}
+
+.cb-enable, .cb-disable, .cb-enable span, .cb-disable span { background: url(/assets/switch.gif) repeat-x; display: block; float: left; }
+.cb-enable span, .cb-disable span { line-height: 30px; display: block; background-repeat: no-repeat; font-weight: bold; }
+.cb-enable span { background-position: left -90px; padding: 0 10px; }
+.cb-disable span { background-position: right -180px;padding: 0 10px; }
+.cb-disable.selected { background-position: 0 -30px; }
+.cb-disable.selected span { background-position: right -210px; color: #fff; }
+.cb-enable.selected { background-position: 0 -60px; }
+.cb-enable.selected span { background-position: left -150px; color: #fff; }
+.switch label { cursor: pointer; }
+.switch input { display: none; }
+
+#options_prot {position:relative; top:-32px; font-size:10px; white-space:nowrap}
+
+.protein_description li {list-style-type: none}
+.protein_description h2 {font-size:14px; color:#1E7368}
+//#protein_description h2 span {border:1px solid #1E7368; padding:7px; border-top-left-radius: 7px; border-top-right-radius: 7px;}
+//.protein_description div {border:1px solid #1E7368; padding:7px; border-radius: 7px}
+table.classic {border-collapse:collapse;border:1px solid grey}
+table.classic th {text-align:left; font-weight:normal; border-bottom:1px solid grey; padding:4px; white-space:nowrap;
+s    background:#DDD;
+    background: linear-gradient( #FFF, #DDD);
+    background: -webkit-linear-gradient( #FFF, #DDD);
+    background: -moz-linear-gradient( #FFF, #DDD);
+    background: -ms-linear-gradient( #FFF, #DDD);
+    background: -o-linear-gradient( #FFF, #DDD);
+    background: linear-gradient( #FFF, #DDD)
+}
+table.classic td {padding-right:5px; padding-left:5px; vertical-align:top}
+
+table.multiline_header th {white-space:normal}
+ 
+#isoform_sequences table {border-collapse:collapse;}
+#isoform_sequences table tr th {text-align:left; background:white;}
+#isoform_sequences table tr td.header {width:100px;overflow: hidden;display: inline-block;white-space:nowrap}
+
+#orthologue_sequences table {border-collapse:collapse;}
+#orthologue_sequences table tr th {text-align:left; background:white;}
+#orthologue_sequences table tr td.header {width:100px;overflow: hidden;display: inline-block;white-space:nowrap}
+
+
+.seq {font-family:Courier New, Courier, Prestige, monospace;}
+.hightlight {background-color:yellow}
+
+#list_proteins_filter {float:right;margin-top:-40px;width:400px}
+
+#go_terms td {vertical-align:top}
+
+table.cysteines {table-layout:fixed}
+table.cysteines th {width:4em;padding:0px}
+table.cysteines th div.n {border:0;width:3em}
+table.cysteines th.first {width:150px}
+table.cysteines td.first {color:black}
+table.cysteines td {color:#DDDDDD}
+
+tr.disulfide td.no  {color:white;text-align:center}
+tr.disulfide td.yes {color:red;text-align:center}
+
+
+table.legend {table-layout:fixed; border-collapse: collapse}
+table.legend tr td {border: 1px solid black; padding:5px}
+
+table.sub_legend tr td {border:0; padding:0}
+
+tr.topology td.val {color:white;text-align:center; width:4em}
+tr.topology td.na {background-color:#DDDDDD}
+tr.topology td.extra {background-color:#CC3366}
+tr.topology td.intra {background-color:#66CC33}
+tr.topology td.mem {background-color:#0099FF}
+
+#palmitoylation_summary {width:100%}
+
+.highlight_container {background-color:#f5f1d8; border-radius: 7px;padding:2em; width:220px;height:60px}
+div.details_link {position:relative; width:60px; bottom:20px; right:-160px;padding:0px;font-size:.8em}
+.highlight_nber {float:left;font-size:20px;margin-bottom:.5em}
+.highlight_text {float:left;font-size:10px;vertical-align:bottom;padding-left:5px;padding-bottom:0px}
+.clear {clear:both}
+
+.no-results {text-align:center; font-size:16px}
+
+#search_help {position:relative;top:-23px;right:-385px;height:33px; width:28px; cursor:pointer; font-size:10px; text-decoration:underline}
+#search_help_main {position:relative;top:-22px;right:-465px;height:33px; width:150px; cursor:pointer; color:blue; text-decoration:underline;font-size:10px}
+
+#search_helper_container {position:relative; height:320px; top:-25px; width:578px; padding:10px;display:none; background-color:#EEEEEE; text-align:left}
+
+#search_helper_container div.helper_button {	
+        width:8em;
+	padding:3px;
+        text-align:left;
+        font-size: 14px;
+        border:1px solid #3DE6CF;
+        color:#1E7368;
+        cursor:pointer;
+	border-radius:7px;
+        background:#E0F2F7;
+	}
+
+#search_helper_container_fix {position:absolute; height:320px; top:50px; width:578px; padding:10px;display:none; background-color:#EEEEEE; text-align:left; z-index:100000}
+
+#search_helper_container_fix div.helper_button {
+        width:8em;
+        padding:3px;
+        text-align:left;
+        font-size: 14px;
+        border:1px solid #3DE6CF;
+        color:#1E7368;
+        cursor:pointer;
+        border-radius:7px;
+        background:#E0F2F7;
+        }
+
+
+.helper_table {border-collapse:collapse;}
+.helper_table tr {height:100%}
+.helper_table td {padding:2px;height:100%}
+
+.important-info {color:red}
+.important {font-weight:bold}
+
+.explanation {border:1px solid orange;  border-radius: 7px; padding:5px;margin-bottom:15px; font-size:8px; display:none}
+
+#caption {position:fixed; width:200px; background-color: #f5f1d8; z-index:1000000;right:0px;top:30%;  border-radius:7px; padding:1em}
+#caption_cross {float:right; background-color:#f5f1d8; color:#b52735; z-index:1000000;cursor:pointer}
+
+.highlight_good {font-weight:bold;color:blue}
+.highlight_bad {font-weight:bold;color:red}
+
+
+.show_button {cursor:pointer;padding-right:5px;}
+
+.info_search {margin-right:370px}

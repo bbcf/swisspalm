@@ -1,0 +1,22 @@
+<% if @output == 'compo' %>
+<table><tr><th></th><th>
+<%= raw (0 .. @window*2).to_a.map{|e| e+1}.join("</th><th>") %>
+</th></tr>
+<% @aa.each do |a| %>
+<tr>
+<td><%= a %></td>
+<% @l[a].each_index do |i| %>
+<td>
+<%= @l[a][i] || 0 %>
+</td>
+<% end %>
+</tr>
+<% end %>
+</table>
+
+<% elsif @output == 'seq_list' %>
+<table>
+<tr><th>UniProt ID</th><th>UniProt AC</th><th>Isoform</th><th>Site Position</th><th>Sequence</th></tr>
+<%= raw "<tr>" + @seq_list.map{|e| "<td>" + [e[:protein].up_id, e[:protein].up_ac, e[:isoform].isoform, e[:pos], e[:seq]].join("</td><td>") + "</td>"}.join("</tr><tr>") + "</tr>" %>
+</table>
+<% end %>

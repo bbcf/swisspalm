@@ -1,0 +1,60 @@
+<h1>Stats on cysteines by organism<%= (@dataset == 'validated') ? ' - Validated dataset of proteins' : ' - All proteins' %></h1>
+<% h_cond = (@dataset == 'validated') ? {:validated_dataset => true } : {} %>
+
+<table id='list_organisms' class='std_table'>
+<thead>
+  <tr>
+<% if admin? %>
+    <th>ID</th>
+<% end %>
+    <th>Name</th>
+<th>Total # of proteins</th>
+<th># of cysteines in main isoforms</th>
+<th># of predicted palmitoylations</th>
+<th># of cysteines involved in disulfide bonds</th>
+<th># of cysteines involved in disulfide bonds and predicted to be palmitoylated</th>
+  </tr>
+</thead>
+<tbody>
+<% @organisms.each do |o| %>
+  <tr>
+<% if admin? %>
+<td><%= o.id %></td>
+<% end %>
+<td><%= o.name %></td>
+<td><%= Protein.count(:conditions => {:has_hits_public => true, :organism_id => o.id}.merge(h_cond)) %></td>
+<% if @dataset == 'all' %>
+<td><%= o.nber_cys_main_isoform %></td>
+<td><%= o.nber_predicted_cys_main_isoform %></td>
+<td><%= o.nber_cys_in_disulfides %></td>
+<td><%= o.nber_predicted_cys_in_disulfides_main_isoform %></td>
+<% elsif @dataset == 'validated' %>
+<td><%= o.nber_cys_main_isoform_val %></td>
+<td><%= o.nber_predicted_cys_main_isoform_val %></td>
+<td><%= o.nber_cys_in_disulfides_val %></td>
+<td><%= o.nber_predicted_cys_in_disulfides_main_isoform_val %></td>
+<% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_organisms').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+//        "iDisplayLength": <%= @organisms.size %>
+        })
+});
+
+
+//]]>
+</script>

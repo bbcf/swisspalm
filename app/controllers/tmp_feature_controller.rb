@@ -1,0 +1,2 @@
+class TmpFeatureController < ApplicationController
+end

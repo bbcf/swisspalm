@@ -1,0 +1,51 @@
+<%= form_for(@hit_site) do |f| %>
+  <% if @hit_site.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hit_site.errors.count, "error") %> prohibited this hit_site from being saved:</h2>
+
+      <ul>
+      <% @hit_site.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+</tr><td>
+Study
+</td><td>
+<%= autocomplete_field_tag 'study_text', '', autocomplete_studies_path, :size => 125 %>
+<%= hidden_field_tag :study_id %>
+</td>
+</tr>
+<!-- if there are hit lists give choice -->
+<!-- if a hit list give protein_id and isoform_id to create new hit -->
+<tr>
+<td>Protein</td>
+<td>
+<%= text_field_tag  :protein_text %>
+<%= hidden_field_tag :protein_id %>
+</td></tr>
+<tr>
+<td>Isoform (optional)</td>
+<td>
+<%= text_field_tag  :isoform_text %>
+<%= hidden_field_tag :isoform_id %>
+</td></tr>
+<tr><td>Position</td><td>
+<%= f.text_field :pos %>
+  </td></tr>
+<tr><td>Transferase</td><td>
+<%= text_field_tag :transferase_text %>
+<%= f.hidden_field :transferase %>
+  </td></tr>
+<tr><td>Required modification</td><td>
+<%= f.check_box :required_mod %>
+  </td></tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

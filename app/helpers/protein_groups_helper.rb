@@ -1,0 +1,2 @@
+module ProteinGroupsHelper
+end

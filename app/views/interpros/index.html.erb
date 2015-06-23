@@ -1,0 +1,21 @@
+<h1>Listing interpros</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @interpros.each do |interpro| %>
+  <tr>
+    <td><%= link_to 'Show', interpro %></td>
+    <td><%= link_to 'Edit', edit_interpro_path(interpro) %></td>
+    <td><%= link_to 'Destroy', interpro, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Interpro', new_interpro_path %>

@@ -1,0 +1,47 @@
+<h1>Listing subcellular fractions</h1>
+
+<table id ='list_subcellular_fractions'>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Obsolete?</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+</thead><tbody>
+<% @subcellular_fractions.each do |subcellular_fraction| %>
+  <tr>
+    <td><%= subcellular_fraction.id %></td>
+    <td><%= subcellular_fraction.name %></td>
+    <td><%= (subcellular_fraction.obsolete) ? 'Yes' : 'No' %></td>
+    <td><%= link_to 'Show', subcellular_fraction %></td>
+    <td><%= link_to 'Edit', edit_subcellular_fraction_path(subcellular_fraction) %></td>
+    <td><% if superadmin? %><%= link_to 'Destroy', subcellular_fraction, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<%= link_to 'New Subcellular fraction', new_subcellular_fraction_path %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_subcellular_fractions').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @subcellular_fractions.size %>
+        })
+});
+
+
+//]]>
+</script>

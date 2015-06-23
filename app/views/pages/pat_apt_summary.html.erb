@@ -1,0 +1,143 @@
+<h1>PAT & APT summary</h1>
+
+In the following tables are reported:<br/> 
+<ul>
+<li>all PAT that have been reported in literature or corresponding to entries tagged with the GO term: protein-cysteine S-palmitoyltransferase activity [0019706].</li>
+<li>all APT hat have been reported in literature</li>
+</ul>
+
+<%# link_to 'PAT homologues graph', pat_graph_path %> <%# link_to 'All known and hypothetical PATs by homology group', pat_by_homology_group_path %>
+
+<% Organism.all.select{|o|  @final_res[0][o.id] || @final_res[1][o.id]}.sort{|a,b| a.name <=> b.name}.each do |o| %>
+
+<h2><%= o.name %></h2>
+<% lists = ['List of PATs', 'List of APTs'] %>
+
+ <% (0 .. 1).to_a.each do |i| %>  
+  <h3><%= lists[i] %></h3>
+  <% if @final_res[i][o.id] %>
+   <table id='list_<%= i %>_<%= o.id %>' class='protein_table'><thead><tr>
+   <% @final_res[i][o.id][0].each do |e| %>
+    <th><%= e %></th>
+   <% end %>
+   </tr>
+</thead><tbody>
+   <% (1 .. @final_res[i][o.id].size-1).to_a.each do |j| %> 
+    <tr>
+    <% @final_res[i][o.id][j].each do |e| %>
+     <td><%= raw e %></td>
+    <% end %>
+    </tr>
+   <% end %>
+   </tbody>
+   </table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_<%= i %>_<%= o.id %>').dataTable({
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+	"aaSorting": [[ 2, "asc" ]],
+        "iDisplayLength": <%= @final_res[i][o.id].size %>
+        })
+});
+
+//]]>
+</script>
+
+
+
+
+  <% else %>
+   No information
+  <% end %>
+<br/><br/>
+ <% end %>
+
+
+<% end %>
+
+<script>
+
+function recenterVoronoi(nodes) {
+    var shapes = [];
+    voronoi(nodes).forEach(function(d) {
+        if ( !d.length ) return;
+        var n = [];
+        d.forEach(function(c){
+            n.push([ c[0] - d.point.x, c[1] - d.point.y ]);
+        });
+        n.point = d.point;
+        shapes.push(n);
+    });
+    return shapes;
+}
+
+var force = d3.layout.force()
+    .charge(-2000)
+    .friction(0.3)
+    .linkDistance(10)
+    .size([width, height]);
+
+force.on('tick', function() {
+    node.attr('transform', function(d) { return 'translate('+d.x+','+d.y+')'; })
+        .attr('clip-path', function(d) { return 'url(#clip-'+d.index+')'; });
+
+    link.attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+
+    var clip = svg.selectAll('.clip')
+        .data( recenterVoronoi(node.data()), function(d) { return d.point.index; } );
+
+    clip.enter().append('clipPath')
+        .attr('id', function(d) { return 'clip-'+d.point.index; })
+        .attr('class', 'clip');
+    clip.exit().remove()
+
+    clip.selectAll('path').remove();
+    clip.append('path')
+        .attr('d', function(d) { return 'M'+d.join(',')+'Z'; });
+});
+
+var data = <%= raw @graph_data.to_json %>
+
+    data.nodes.forEach(function(d, i) {
+        d.id = i;
+    });
+
+    link = svg.selectAll('.link')
+        .data( data.links )
+      .enter().append('line')
+        .attr('class', 'link')
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+    node = svg.selectAll('.node')
+        .data( data.nodes )
+      .enter().append('g')
+        .attr('title', name)
+        .attr('class', 'node')
+        .call( force.drag );
+
+    node.append('circle')
+        .attr('r', 10)
+        .attr('fill', colorByGroup)
+        .attr('fill-opacity', 0.5);
+
+    node.append('circle')
+        .attr('r', 3)
+        .attr('stroke', 'black');
+
+    force
+        .nodes( data.nodes )
+        .links( data.links )
+        .start();
+
+
+    </script>

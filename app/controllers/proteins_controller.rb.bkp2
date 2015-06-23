@@ -1,0 +1,224 @@
+class ProteinsController < ApplicationController
+  autocomplete :ref_protein, :value, :full => true
+
+# def get_autocomplete_items(parameters)
+#    items = super(parameters)
+#    #conditions = (params[:action] == 'autocomplete_synonym_value') ? "expression_data is true" : "acc != name and in_flybase is true"
+#   items.select{|e| e.protein}.map{|e| e.protein}.uniq! #if params[:gene_name]                                                                                                                                                                                         
+#    #      item = items.where('acc != name') if params[:go_term]                                                                                                                                                                                  
+#  end#
+  
+  def autocomplete
+
+    threshold = 15
+
+    subterms = params[:term].split(/[\s\(\),;\:]+/).uniq
+    words = []
+ #   words2= []
+    unfound_level = nil
+    (0 .. subterms.size-1).to_a.each do |i|
+      pos = subterms.size-1-i
+      expr = (pos .. subterms.size-1).to_a.map{|i| subterms[i]}.join(" ")
+    #  tmp_words = Word.find(:all, :conditions => ['value ~ ?' , expr])
+    #  tmp_words2 = Word.find(:all, :conditions => ['lower(value) ~ ? AND value !~ ?' , expr.downcase, expr])
+     tmp_words = Word.find(:all, :conditions => ['lower(value) ~ ?' , expr.downcase])  
+      if tmp_words.size ==0 and tmp_words2.size ==0
+        unfound_level = i
+        break
+      end
+      words = tmp_words
+#      words2 = tmp_words2
+    end
+
+
+    words = words.sort!{|a, b| a.value.size <=> b.value.size}# + words2.sort!{|a, b| a.value.size <=> b.value.size}
+    nber_words = words.size
+    if nber_words > threshold
+      words = words.first(threshold)
+    end
+    
+    log = unfound_level.to_s
+    to_render =  words.map{|w| {:id => w.id, :label => w.value}}
+    label = ''
+    label = 'No results' if nber_words == 0
+    label = (nber_words-threshold).to_s + ' more' if nber_words >threshold
+    to_render.push({:id => nil, :label => label})  if label != ''
+       to_render.push({:id => nil, :label => log})                                                                                                                                                                                                   
+    render :text => to_render.to_json
+    
+
+    
+  end
+
+
+ def search
+
+#   threshold = 6
+
+
+   conditions = [""]
+   cond_parts = []
+   subterms = params[:term].downcase.split(/[^\w\d]+/).uniq
+
+ #  subterms.each do |subterm|
+ #    cond_parts.push('value ~ ?')
+ #    conditions.push(subterm)
+ #  end
+ #  conditions[0]= cond_parts.join(" OR ")
+
+   palm_protein_ids = Protein.find(:all, :conditions => {:has_hits => true}).map{|e| e.id}
+
+   counts = []
+   subterms.each_index do |i|
+     subterm = subterms[i]
+     count = RefPalm.count(:all, :conditions => ['lower(value) ~ ?' , subterm])
+     counts.push([subterm, count])
+     break if count ==0
+   end
+   
+   counts.sort!{|a,b| a[1] <=> b[1]}
+   nber_proteins = 0
+   protein_ids = []
+
+#   if counts.first[1] < 1000
+     
+   log = ''
+   if counts.first[1] >0
+     seedterm = counts.first[0]
+     ref_proteins = RefPalm.find(:all, :conditions => ['lower(value) ~ ?' , seedterm])
+     protein_ids = ref_proteins.map{|e| e.protein_id}.uniq
+     log += protein_ids.join(',')
+     
+     (1 .. counts.size-1).to_a.each do |i|
+       if  protein_ids.size < 100
+         ref_proteins = RefPalm.find(:all, :conditions => ['lower(value) ~ ? and protein_id in (?)' , counts[i][0], protein_ids])
+         protein_ids= ref_proteins.map{|e| e.protein_id}.uniq
+         #       ref_proteins.map{|e| proteins[e.protein_id]=nil}
+       else
+         ref_proteins2 = RefPalm.find(:all, :conditions => ['lower(value) ~ ?' , counts[i][0]])
+         protein_ids2 = ref_proteins2.map{|e| e.protein_id}.uniq
+         #         log += protein_ids.join(',') + 'bla'
+         protein_ids = protein_ids & protein_ids2
+         #         log += protein_ids.join(',')
+       end
+     end
+     #else
+
+   #end
+                                   
+
+#   h_proteins = {}
+     #   ref_proteins.map{|e| h_proteins[e.protein_id]=nil}
+    # nber_proteins = protein_ids.size
+     
+    # if nber_proteins > threshold
+    #   protein_ids = protein_ids.first(threshold)
+    # end
+     
+   end
+
+    @proteins = Protein.find(protein_ids)
+
+#   to_render =  protein_ids.map{|p| {:id => p.up_ac, :label => p.up_ac}}
+#   label = ''
+#   label = 'No results' if nber_proteins == 0
+#   label = (nber_proteins-threshold).to_s + ' more' if nber_proteins >threshold
+#   to_render.push({:id => nil, :label => label})  if label  != ''
+#   to_render.push({:id => nil, :label => log})
+   render :partial => 'index'
+#   respond_to do |format|
+#     format.json { render :json => result.to_json }
+#    end
+
+ end
+
+
+  # GET /proteins
+  # GET /proteins.json
+  def index
+    
+ #   h_organisms = {}
+ #   Organism.all.each do |o|
+ #     h_organisms[o.up_tag]=o
+ #   end
+    
+#    @proteins = Protein.find(:all, :conditions => {:has_hits => true, :organism_id => h_organisms[params[:organism_tag]].id})
+    @proteins = Protein.find(:all, :conditions => {:has_hits => true})
+#    @proteins.select!{|e| e.organism_id ==1 }
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @proteins }
+    end
+  end
+
+  # GET /proteins/1
+  # GET /proteins/1.json
+  def show
+    @protein = Protein.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @protein }
+    end
+  end
+
+  # GET /proteins/new
+  # GET /proteins/new.json
+  def new
+    @protein = Protein.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @protein }
+    end
+  end
+
+  # GET /proteins/1/edit
+  def edit
+    @protein = Protein.find(params[:id])
+  end
+
+  # POST /proteins
+  # POST /proteins.json
+  def create
+    @protein = Protein.new(params[:protein])
+
+    respond_to do |format|
+      if @protein.save
+        format.html { redirect_to @protein, notice: 'Protein was successfully created.' }
+        format.json { render json: @protein, status: :created, location: @protein }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @protein.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /proteins/1
+  # PUT /proteins/1.json
+  def update
+    @protein = Protein.find(params[:id])
+
+    respond_to do |format|
+      if @protein.update_attributes(params[:protein])
+        format.html { redirect_to @protein, notice: 'Protein was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @protein.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /proteins/1
+  # DELETE /proteins/1.json
+  def destroy
+    @protein = Protein.find(params[:id])
+    @protein.destroy
+
+    respond_to do |format|
+      format.html { redirect_to proteins_url }
+      format.json { head :no_content }
+    end
+  end
+end

@@ -1,0 +1,17 @@
+<%= form_for(@go_term_enrichment) do |f| %>
+  <% if @go_term_enrichment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@go_term_enrichment.errors.count, "error") %> prohibited this go_term_enrichment from being saved:</h2>
+
+      <ul>
+      <% @go_term_enrichment.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

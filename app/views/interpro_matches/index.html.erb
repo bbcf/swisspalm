@@ -1,0 +1,21 @@
+<h1>Listing interpro_matches</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @interpro_matches.each do |interpro_match| %>
+  <tr>
+    <td><%= link_to 'Show', interpro_match %></td>
+    <td><%= link_to 'Edit', edit_interpro_match_path(interpro_match) %></td>
+    <td><%= link_to 'Destroy', interpro_match, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Interpro match', new_interpro_match_path %>

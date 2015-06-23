@@ -1,0 +1,21 @@
+<h1>Listing orthodb_levels</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orthodb_levels.each do |orthodb_level| %>
+  <tr>
+    <td><%= link_to 'Show', orthodb_level %></td>
+    <td><%= link_to 'Edit', edit_orthodb_level_path(orthodb_level) %></td>
+    <td><%= link_to 'Destroy', orthodb_level, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Orthodb level', new_orthodb_level_path %>

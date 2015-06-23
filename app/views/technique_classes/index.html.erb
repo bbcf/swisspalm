@@ -1,0 +1,21 @@
+<h1>Listing technique_classes</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @technique_classes.each do |technique_class| %>
+  <tr>
+    <td><%= link_to 'Show', technique_class %></td>
+    <td><%= link_to 'Edit', edit_technique_class_path(technique_class) %></td>
+    <td><%= link_to 'Destroy', technique_class, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Technique class', new_technique_class_path %>

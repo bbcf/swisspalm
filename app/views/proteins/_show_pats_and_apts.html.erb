@@ -1,0 +1,33 @@
+<% if @pat_reactions.size > 0 %>
+<li>
+<h2>Palmitoyl transferase activity (PAT)</h2>
+<table><tr>
+<th>
+Protein
+</th><th>
+Site position
+</th></tr>
+<tr><td>
+<%= raw @pat_reactions.select{|pr| !@h_pat_sites[pr.hit.protein_id] or pr.site }.map{|pr|
+protein = pr.hit.protein;
+(link_to protein.up_id, protein_path(protein)) + raw("</td><td>") + ((pr.site) ? pr.site.pos.to_s : 'NA')}.join("</td></tr><tr><td>") %>
+</td></tr></table>
+</li>
+<% end %>
+
+<% if @apt_reactions.size > 0 %>
+<li>
+<h2>Acylprotein thioesterase activity (APT)</h2>
+<table><tr>
+<th>
+Protein
+</th><th>
+Site position
+</th></tr>
+<tr><td>
+<%= raw @apt_reactions.select{|pr| !@h_apt_sites[pr.hit.protein_id] or pr.site }.map{|pr|
+protein = pr.hit.protein;
+(link_to protein.up_id, protein_path(protein)) + raw("</td><td>") + ((pr.site) ? pr.site.pos.to_s : 'NA')}.join("</td></tr><tr><td>") %>
+</td></tr></table>
+</li>
+<% end %>

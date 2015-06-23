@@ -1,0 +1,51 @@
+<li id='hits_and_sites_list'>
+<h2><span class='show_button'>+</span>Palmitoylation hits and sites</h2>
+<div class='show_content hidden'>
+<table class='classic'>
+<tr>
+<th>Hit ID</th>
+<th>Study #</th>
+<th>Reference</th>
+<th>Hit list</th>
+<th>Isoform #</th>
+<th>Sites (ID, position, characterisation techniques)</th>
+</tr>
+<%  @hits.each do |hit| %>
+<tr>
+<td class='nowrap'><%= "SPalmH:" + hit.id.to_s %></td>
+<td class='nowrap'>Study <%= (@h_studies[hit.study_id]) ? (@h_studies[hit.study_id] + 1) : hit.study_id %></td>
+<td>
+</td>
+<td><%= (hit.hit_list) ? (link_to hit_list_label(hit.hit_list), hit_list_path(hit.hit_list)) : '-' %></td>
+<td><%= (hit.isoform) ? "Isoform " + hit.isoform.isoform.to_s : '-' %></td>
+<td>
+
+<% if (hit.sites.size > 0) %>
+
+<table>
+<!--<tr>
+<th>Site ID</th>
+<th>Position</th>
+<th>Characterisation technique(s)</th>
+</tr>-->
+<% hit.sites.each do |site| %>
+<tr>
+<td class='nowrap'><%= raw "SPalmS:#{site.id}" %></td>
+<td>,</td>
+<td><%= raw "Cys<sup>" + site.pos.to_s + "</sup>" + ((site.uncertain_pos == true) ? "<span style='font-style:italic'>(uncertain)</span>" : '') %></td>
+<td><%= "," if site.techniques.size > 0 %></td>
+<td><%= (site.techniques.size > 0) ? site.techniques.map{|e| e.name}.join(', ') : '' %></td>
+</tr>
+<% end %>
+</table>
+<% else %>
+<span style='font-style:italic'>None</span>
+<% end %>
+
+</td>
+</tr>
+<% end %>
+</div>
+</table>
+
+</li>

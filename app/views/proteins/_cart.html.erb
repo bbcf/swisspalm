@@ -1,0 +1,5 @@
+<% @proteins=Protein.find(session[:proteins].keys).sort{|a,b| a.up_id <=> b.up_id } %>
+<%= raw @proteins.map{|e| link_to(e.up_id,protein_path(e)) + raw("<sup>" + link_to_function('x', "upd_protein_cart('" + upd_cart_protein_path(e.id) + "')", {:class => 'del'}) + "</sup>") }.join(" ") %>
+<% if admin? %>
+<div class='action'><%= link_to 'Compare cystein environments', compare_cys_envs_path %></div>
+<% end %>

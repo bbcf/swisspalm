@@ -1,0 +1,21 @@
+<h1>Listing tmp_words</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @tmp_words.each do |tmp_word| %>
+  <tr>
+    <td><%= link_to 'Show', tmp_word %></td>
+    <td><%= link_to 'Edit', edit_tmp_word_path(tmp_word) %></td>
+    <td><%= link_to 'Destroy', tmp_word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Tmp word', new_tmp_word_path %>

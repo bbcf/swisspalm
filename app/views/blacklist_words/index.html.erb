@@ -1,0 +1,21 @@
+<h1>Listing blacklist_words</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @blacklist_words.each do |blacklist_word| %>
+  <tr>
+    <td><%= link_to 'Show', blacklist_word %></td>
+    <td><%= link_to 'Edit', edit_blacklist_word_path(blacklist_word) %></td>
+    <td><%= link_to 'Destroy', blacklist_word, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Blacklist word', new_blacklist_word_path %>

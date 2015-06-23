@@ -1,0 +1,47 @@
+<p id="notice"><%= notice %></p>
+
+
+<table id='study_table'>
+<tr>
+<td class='title'>Title</td><td><%= @study.title %></td>
+</tr>
+<tr>
+<td class='title'>Authors</td><td><%= raw @study.authors.gsub(/et al./, "<span style='font-style:italic'>et al.</span>") %></td>
+</tr>
+<tr>
+<td class='title'>PMID</td><td><%= @study.pmid %></td>
+</tr>
+<tr>
+<td class='title'>Year</td><td><%= @study.year %></td>
+</tr>
+<tr>
+<td class='title'>Organism</td><td><%= ((@study.organism) ? @study.organism.name : 'NA') %></td>
+</tr>
+<tr>
+<td class='title'>Cell type</td><td><%= ((@study).cell_type ? @study.cell_type.name : 'NA') %></td>
+</tr>
+<tr>
+<td class='title'>Subcellular fraction</td><td><%= (@study.subcellular_fraction) ? @study.subcellular_fraction.name : 'NA' %></td>
+</tr>
+<tr>
+<td class='title'>Techniques</td>
+<td>
+<%= @study.techniques.map{|e| e.name}.join(", ") %>
+</td>
+</tr>
+<tr>
+<td class='title'>Lists of hits</td>
+<td>
+<table>
+<tr><th>Label</th><th>List of proteins</th></tr>
+<% @study.hit_lists.each do |hit_list| %>
+<tr><td><%= link_to ((hit_list.label != '') ? hit_list.label : ((hit_list.confidence_level) ? hit_list.confidence_level.name + " confidence" : 'NA')), study_hit_list_path(@study, hit_list) %></td><td><%= raw hit_list.hits.sort{|a, b| a.protein.up_id <=> b.protein.up_id}.map{|e| link_to(e.protein.up_id, APP_CONFIG[:uniprot_base_url] + e.protein.up_ac, {:target => '_blank'})}.join(", ") %></td></tr>
+<% end %>
+</table>
+</td>
+</tr>
+
+</table>
+
+<%= link_to 'Edit', edit_study_path(@study) %> |
+<%= link_to 'Back', studies_path + '?large_scale=' + ((@study.large_scale) ? '1' : '0') %>

@@ -1,0 +1,21 @@
+<h1>Listing palmitome_entries</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @palmitome_entries.each do |palmitome_entry| %>
+  <tr>
+    <td><%= link_to 'Show', palmitome_entry %></td>
+    <td><%= link_to 'Edit', edit_palmitome_entry_path(palmitome_entry) %></td>
+    <td><%= link_to 'Destroy', palmitome_entry, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Palmitome entry', new_palmitome_entry_path %>

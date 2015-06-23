@@ -1,0 +1,17 @@
+<%= form_for(@subcellular_location) do |f| %>
+  <% if @subcellular_location.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subcellular_location.errors.count, "error") %> prohibited this subcellular_location from being saved:</h2>
+
+      <ul>
+      <% @subcellular_location.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

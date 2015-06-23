@@ -1,0 +1,2 @@
+module OmaRelationTypesHelper
+end

@@ -1,0 +1,21 @@
+<h1>Listing go_terms</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @go_terms.each do |go_term| %>
+  <tr>
+    <td><%= link_to 'Show', go_term %></td>
+    <td><%= link_to 'Edit', edit_go_term_path(go_term) %></td>
+    <td><%= link_to 'Destroy', go_term, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Go term', new_go_term_path %>

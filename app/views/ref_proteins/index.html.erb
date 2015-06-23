@@ -1,0 +1,21 @@
+<h1>Listing ref_proteins</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @ref_proteins.each do |ref_protein| %>
+  <tr>
+    <td><%= link_to 'Show', ref_protein %></td>
+    <td><%= link_to 'Edit', edit_ref_protein_path(ref_protein) %></td>
+    <td><%= link_to 'Destroy', ref_protein, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Ref protein', new_ref_protein_path %>

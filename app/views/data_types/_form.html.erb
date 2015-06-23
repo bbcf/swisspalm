@@ -1,0 +1,67 @@
+<%= form_for(@data_type) do |f| %>
+  <% if @data_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@data_type.errors.count, "error") %> prohibited this data_type from being saved:</h2>
+
+      <ul>
+      <% @data_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr><td>
+Name
+</td><td>
+<%= f.text_field :name %>
+</td></tr>
+<tr><td>
+Description
+</td><td>
+<%= f.text_field :description %>
+</td></tr>
+<tr><td>
+Tag
+</td><td>
+<%= f.text_field :tag %>
+</td></tr>
+<tr><td>
+URL link
+</td><td>
+<%= f.text_field :url_link %>
+</td></tr>
+<tr><td>
+URL download
+</td><td>
+<%= f.text_field :url_download %>
+</td></tr>
+<tr><td>
+Object
+</td><td>
+<%= f.text_field :obj %>
+</td></tr>
+<tr><td>
+ID field
+</td><td>
+<%= f.text_field :id_field %>
+</td></tr>
+<tr><td>
+name field
+</td><td>
+<%= f.text_field :name_field %>
+</td></tr>
+<tr><td>
+Condition
+</td><td>
+<%= f.text_field :condition %>
+</td></tr>
+
+
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

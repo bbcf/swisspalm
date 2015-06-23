@@ -1,0 +1,32 @@
+<% h = {} %>
+<% @h_seq.each_index do |chunk_i| %>
+<% h_seq = @h_seq[chunk_i] %>
+<table id='isoform_sequences'>
+<%# @h_seq[1]. %>
+<thead>
+<tr>
+<th></th>
+<% if h_seq[1].size < 11 %>
+<th><%= raw (chunk_i*100 +1) %></th>
+<% else %>
+<%= raw (0 .. (h_seq[1].size/10).to_i-1).to_a.map{|i| "<th>#{chunk_i*100 + i*10+1}</th>"}.join('') %>
+<% end %>
+</tr>
+</thead>
+<tbody>
+<% h_seq.keys.sort.each do |isoform| %>
+<% h[isoform]||=0 %>
+ <% t = h_seq[isoform].scan(/[\w\-]{1,10}/) %>
+ <tr><td class='header'>Isoform <%= isoform %></td>
+ <% t.each do |e| %>
+  <td class='seq'>
+<% e.split('').each do |e2| -%>
+<%= raw ((e2 == 'C') ? "<span class='hightlight' title='#{h[isoform]}'>C</span>" : e2)-%>
+<% h[isoform] += 1 if e2 != '-' -%>
+<% end %>
+ <% end %>
+ </tr>
+<% end %>
+</tbody>
+</table>
+<% end %>

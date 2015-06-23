@@ -1,0 +1,21 @@
+<h1>Listing isoform_diff_predictions</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @isoform_diff_predictions.each do |isoform_diff_prediction| %>
+  <tr>
+    <td><%= link_to 'Show', isoform_diff_prediction %></td>
+    <td><%= link_to 'Edit', edit_isoform_diff_prediction_path(isoform_diff_prediction) %></td>
+    <td><%= link_to 'Destroy', isoform_diff_prediction, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Isoform diff prediction', new_isoform_diff_prediction_path %>

@@ -1,0 +1,41 @@
+<li>
+<h2>Homologues</h2>
+
+<table>
+<thead>
+<tr>
+<th>UniProt AC</th>
+<th>UniProt ID</th>
+<th>UniProt status</th>
+<th>OrthoDB groups</th>
+<th>Best orthologue</th>
+    <th>Organism</th>
+    <th>Description</th>
+    <th>Isoforms</th>
+    <th># palmitome studies</th>
+    <th># of distinct techniques</th>
+    <th># of known sites</th>
+    <th># of putative sites</th>
+<tr>
+</thead><tbody>
+<% @homologues.each do |homologue| %>
+<tr>
+<td>
+<%= format_up_ac(homologue) %> 
+</td>
+<td><%= homologue.up_id %></td>
+<td class='center'><%= uniprot_status(homologue) %></td>
+<!--<td><%# (@h_oma_pairs[:oma][homologue.id]) ? "OMA" : ((@h_oma_pairs[:gene_names][homologue.id]) ? 'UniProt ID' : 'Reference') %></td>-->
+<td><%= @h_orthodb_attrs[homologue.id].map{|e| e.orthodb_group_id + " [" + e.level.to_s + "]" }.join(", ") %></td>
+<td><%= (@h_best_orthologues[homologue.id] ==1) ? 'Yes' : 'No' %></td>
+<td><%= (homologue.organism) ? homologue.organism.name : 'NA' %></td>
+<td><%= homologue.description %></td>
+<td><%= homologue.isoforms.select{|i| i.latest_version}.size %></td>
+<td><%= homologue.hits.map{|h| h.study}.select{|s| s.large_scale}.uniq.size  %>/<%= @h_nber_studies_by_organism[homologue.organism_id] %></td>
+<td><%= homologue.hits.map{|h| h.study}.select{|s| s.large_scale}.map{|s| s.techniques}.flatten.uniq.size %></td>
+<td><%= homologue.hits.map{|h| h.sites}.flatten.map{|s| {:pos => s.pos, :isoform => s.hit.isoform}}.uniq.size %></td>
+</tr>
+<% end %> 
+</tbody>
+</table>
+</li>

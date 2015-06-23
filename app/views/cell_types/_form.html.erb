@@ -1,0 +1,30 @@
+<%= form_for(@cell_type) do |f| %>
+  <% if @cell_type.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cell_type.errors.count, "error") %> prohibited this cell_type from being saved:</h2>
+
+      <ul>
+      <% @cell_type.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+<tr>
+<td>Name</td>
+<td><%= f.text_field :name %></td>
+</tr>
+<tr>
+<td>Cellosaurus</td>
+<% l = CellosaurusCellType.all.map{|e| [e.name, e.id]} %>
+<% l.unshift(['None', '']) %>
+<td><%= f.select :cellosaurus_cell_type_id, l %></td>
+</tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,19 @@
+<li>
+<h2><span class='show_button'>+</span>GO terms</h2>
+<div class='show_content hidden'>
+<table id='go_terms' class='classic'><tr>
+<%# raw @protein.protein_go_associations.select{|e| e.parent == false}.map{|e| e.id.to_s + ":" + e.go_term.name}.sort.join("<br/>") %>
+<% term_types = @h_go_term_by_term_type.keys.sort %>
+<% term_types.each do |term_type| %>
+<th><%= term_type.gsub("_", " ").capitalize %></th>
+<% end %>
+</tr>
+<tr>
+<% term_types.each do |term_type| %>
+
+<td><%= raw @h_go_term_by_term_type[term_type].sort{|a, b| a[1] <=> b[1]}.map{|e| "GO:" + e[0].to_s + " " + e[1].capitalize}.join("<br/>") %></td>
+<% end %>
+</tr>
+</table>
+</div>
+</li>

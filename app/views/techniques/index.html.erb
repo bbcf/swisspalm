@@ -1,0 +1,62 @@
+<h1>Listing techniques</h1>
+
+<%= link_to 'New Technique', new_technique_path %>
+
+
+<table id ='list_techniques'>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Parent ID</th>
+    <th>Name</th>
+    <th>Category</th>
+    <th>Class</th>
+    <th>Used in palmitoyl-proteome studies</th>
+    <th>Used for site characterization</th>
+    <th>Total # of hits / # of related proteins</th>
+    <th>Total # of sites for study method / # of related proteins</th>
+    <th>Total # of sites for site characterisation method / # of related proteins</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+</thead><tbody>
+<% @techniques.each do |technique| %>
+  <tr>
+    <td><%= technique.id %></td>
+    <td><%= technique.parent_id %></td>
+    <td><%= raw technique.name %></td>
+    <td><%= raw (technique.technique_category) ? technique.technique_category.name : 'NA' %></td>
+    <td><%= raw (technique.technique_class) ? technique.technique_class.name : 'NA' %></td>
+    <td><%= (technique.large_scale) ? 'Yes' : 'No' %>
+    <td><%= (technique.site_characterization) ? 'Yes' : 'No' %></td>
+    <td><%= hits = technique.studies.map{|s| s.hits}.flatten; hits.size %> / <%= hits.map{|h| h.protein_id}.uniq.size %></td>
+    <td><%= sites = hits.map{|h| h.sites}.flatten; sites.size %> / <%= sites.map{|s| s.hit.protein_id}.uniq.size %></td>
+    <td><%= technique.sites.size %> / <%= technique.sites.map{|s| s.hit.protein_id}.uniq.size %></td>
+    <td><%= link_to 'Show', technique %></td>
+    <td><%= link_to 'Edit', edit_technique_path(technique) %></td>
+    <td><% if superadmin? %><%= link_to 'Destroy', technique, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_techniques').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @techniques.size %>
+        })
+});
+
+
+//]]>
+</script>

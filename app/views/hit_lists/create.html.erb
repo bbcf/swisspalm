@@ -1,0 +1,44 @@
+<p id="notice"><%= @notice %></p>
+
+<h1>Hit list</h1>
+
+<%= @new_hits.size %> genes.
+
+<table id='list_hits' class='std_table'>
+<thead>
+  <tr>
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>Gene names</th>
+    </tr>
+</thead>
+<tbody>
+<% @new_hits.each do |hit| %>
+<% protein = Protein.find(hit[:protein_id]) %>
+  <tr>
+    <td><%= protein.up_ac  %></td>
+    <td><%= protein.up_id %></td>
+    <td><%= protein.ref_proteins.select{|e| e.source_type and e.source_type.name == 'gene_name'}.map{|e| e.value}.join(", ") %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": 2000
+        })
+});
+
+
+//]]>
+</script>
+

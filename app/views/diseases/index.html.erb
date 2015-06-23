@@ -1,0 +1,21 @@
+<h1>Listing diseases</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @diseases.each do |disease| %>
+  <tr>
+    <td><%= link_to 'Show', disease %></td>
+    <td><%= link_to 'Edit', edit_disease_path(disease) %></td>
+    <td><%= link_to 'Destroy', disease, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Disease', new_disease_path %>

@@ -1,0 +1,21 @@
+<h1>Listing distances</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @distances.each do |distance| %>
+  <tr>
+    <td><%= link_to 'Show', distance %></td>
+    <td><%= link_to 'Edit', edit_distance_path(distance) %></td>
+    <td><%= link_to 'Destroy', distance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Distance', new_distance_path %>

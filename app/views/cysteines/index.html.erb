@@ -1,0 +1,21 @@
+<h1>Listing cysteines</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cysteines.each do |cysteine| %>
+  <tr>
+    <td><%= link_to 'Show', cysteine %></td>
+    <td><%= link_to 'Edit', edit_cysteine_path(cysteine) %></td>
+    <td><%= link_to 'Destroy', cysteine, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Cysteine', new_cysteine_path %>

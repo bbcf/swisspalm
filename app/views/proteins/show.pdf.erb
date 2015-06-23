@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <%= wicked_pdf_stylesheet_link_tag "pdf" -%>
+    <%= wicked_pdf_javascript_include_tag "number_pages" %>
+    <%= wicked_pdf_stylesheet_link_tag  'swisspalm.css' %>  
+  </head>
+  <body onload='number_pages'>
+    <div id="header">
+      <%# wicked_pdf_image_tag 'mysite.jpg' %>
+    </div>
+    <div id="content">
+<%= render :partial => 'show_references', :formats => [:html] %>
+
+<%= render :partial => 'show_studies', :formats => [:html] %>
+
+<%= render :partial => 'show_hits_and_sites', :formats => [:html] %>
+
+<% if @h_pred.keys.size > 0 %>
+<%= render :partial => 'show_predictions', :formats => [:html] %>
+<% end %>
+
+<%# render(:partial => 'show_homologues', :formats => [:html]) if @homologues.size > 0 %>
+
+<%# render :partial => 'show_go_terms', :formats => [:html] %>
+
+    </div>
+  </body>
+</html>

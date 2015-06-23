@@ -1,0 +1,64 @@
+<li><h2><span class='show_button'>-</span><span>Palmitoylation summary</span></h2>
+<div class='show_content'>
+<%= 'Validated by 2 independant techniques or by a targeted study.' if @protein.validated_dataset == true %>
+<% nber_palm_studies =  @hits.select{|h| @studies[@h_studies[h.study_id]].large_scale == true and hl = h.hit_list and hl.confidence_level and hl.confidence_level.tag == 'HC'}.map{|h| h.hit_list.study}.uniq.size %>
+<%= raw '<br/>High confidence hit in ' + nber_palm_studies.to_s + ' palmitoyl-proteome studies.' if nber_palm_studies > 0 %> 
+<%# if (lab_user? and @protein.has_hits) or (!lab_user? and @protein.has_hits_public) %>
+<br/><br/>
+
+<table id='palmitoylation_summary'><tr><td>
+<div class='highlight_container'>
+<% nber_palmitomes = @hits.select{|h| @studies[@h_studies[h.study_id]].large_scale == true}.map{|h| h.study_id}.uniq.size %>
+<div class='highlight_nber <%= (nber_palmitomes == 0) ? 'lc' : ((nber_palmitomes.to_f / @h_nber_studies_by_organism[@protein.organism_id] < 0.5) ? 'mc' : 'hc')  %>'><%= nber_palmitomes %>/<%= @h_nber_studies_by_organism[@protein.organism_id] %></div>
+
+<div class='highlight_text'><%= o = @protein.organism; (o.common_name && o.common_name.downcase) || o.name.downcase %> palmitoyl-proteome<%= ( nber_palmitomes > 1) ? 's' : '' %></div>
+
+<div class='clear'></div>
+<div class='highlight_nber <%= (@nber_orthologues_in_palmitomes == 0) ? 'lc' : ((@nber_orthologues_in_palmitomes == 1) ? 'mc' : 'hc')  %>'><%= @nber_orthologues_in_palmitomes %></div>
+<div class='highlight_text'> orthologues in palmitoyl-proteomes</div>
+</div>
+<div class='details_link'>&#8674; <%= raw link_to "Details", "#list_orthologues", :id => 'details_1' %></div>
+
+</td><td>
+<div class='highlight_container'>
+<% nber_targeted =  @hits.select{|h|  @studies[@h_studies[h.study_id]].large_scale == false}.map{|h| h.study_id}.uniq.size %>
+<div class='highlight_nber <%= (nber_targeted == 0) ? 'lc' : ((nber_targeted == 1) ? 'mc' : 'hc') %>'><%= nber_targeted %></div>
+<div class='highlight_text'>targeted <%= ( nber_targeted > 1) ? 'studies' : 'study' %></div>
+<div class='clear'></div>
+<div class='highlight_nber <%= (@nber_orthologues_in_targeted_studies == 0) ? 'lc' : ((@nber_orthologues_in_targeted_studies == 1) ? 'mc' : 'hc') %>'><%= @nber_orthologues_in_targeted_studies %></div>
+<div class='highlight_text'><%= ( nber_targeted > 1) ? 'orthologues' : 'orthologue' %> in targeted studies</div>
+</div>
+<div class='details_link'>&#8674; <%= raw link_to "Details", "#list_studies", :id => 'details_2' %></div>
+</td><td>
+<div class='highlight_container'>
+<% site_hits = @hits.select{|h| h.sites.size > 0} %>
+<% sites = site_hits.map{|h| h.sites}.flatten.map{|e| "Cys<sup>" + e.pos.to_s + "</sup>"}.uniq %>
+<div class='highlight_nber <%= (sites.size == 0) ? 'lc' : 'hc' %>'><%= sites.size %></div>
+<div class='highlight_text'><%= (sites.size > 1) ? 'sites' : 'site' %></div>
+&nbsp;<%= raw sites.join(", ") %>
+</div>
+<div class='details_link'>&#8674; <%= raw link_to "Details", "#hits_and_sites_list", :id => 'details_3' %></div>
+</td><td>
+<div class='highlight_container'>
+<% if @protein.has_hc_pred %>
+<%= raw (@protein.has_hc_pred_valid == true) ? "<div class='hc'>Predicted</div>" : "<div class='not_validated'>Predicted, Not validated</div>" %>
+<% else %>
+<div class='lc'>Not predicted</div>
+<% end %>
+<% main_isoform = @isoforms.select{|i| i.main and i.latest_version}.first %>
+<% predicted_ok = (@protein.has_hc_pred_valid == true) ? main_isoform.predictions.select{|pred| pred.hc_pred and pred.compatible_loc} : main_isoform.predictions.select{|pred| pred.hc_pred} %>
+<% nber_predicted_ok = predicted_ok.size %>
+<% nber_isoforms_predicted_ok = predicted_ok.map{|p| p.isoform_id}.uniq.size %>
+<% if nber_predicted_ok > 0 %>
+<div class='highlight_nber <%= (@protein.has_hc_pred_valid == true) ? 'hc' : 'not_validated' %>'><%= nber_predicted_ok %></div><div class='highlight_text'>cysteines in main isoform</div>
+<!--<div class='highlight_nber <%= (@protein.has_hc_pred_valid == true) ? 'hc' : 'not_validated' %>'><%= nber_isoforms_predicted_ok %>/<%= @isoforms.size %></div><div class='highlight_text'>isoform<%= (@isoforms.size > 1) ? 's' : '' %></div>-->
+<% end %>
+</div>
+<div class='details_link'>&#8674; <%= raw link_to "Details", "#cysteines_summary", {:id => 'details_4'} %></div>
+
+</td></tr></table>
+<%# else %>
+<!--There is no evidence for palmitoylation of this protein.-->
+<%# end %>
+
+</div></li>

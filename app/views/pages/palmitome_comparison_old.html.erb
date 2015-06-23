@@ -1,0 +1,112 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Comparison of palmitomes</h1>
+
+HC = High confidence, MC = Medium confidence, LC = Low confidence
+<br/>
+
+<table><tr><td>
+<b>Filters</b>
+<table><tr><td>
+<% l = @organisms.map{|o| [o.name, o.id]}.sort %>
+Reference organism
+</td><td>
+  <%= select_tag :ref_organism_id, options_for_select(l, params[:ref_organism_id]), {} %>
+</td></tr>
+<tr><td>
+<% l = (1 .. @all_studies.size-1).to_a %>
+Minimum of studies where to find a protein
+</td><td>
+ <%= select_tag :nber_studies, options_for_select(l, params[:nber_studies]), {} %>
+</td></tr>
+<tr><td>
+Search on a specific set of studies
+(click on + aside each study listed below)
+</td><td id='filter_list_studies'>
+<%= (session[:studies].size > 0) ? (render :partial => 'studies/cart') : 'All' %>
+</td></tr>
+<!--<tr><td>
+Merge TrEMBL entries with SwissProt entries sharing at least one identical gene name
+</td><td>
+<%= check_box_tag 'merge_entries', 1, params[:merge_entries], {} %>
+</td></tr>
+-->
+</table>
+</td><td>
+<%= link_to_function 'Update', 'update_list()' %> | <%= link_to_function 'Download', 'download_txt()' %>
+</td></tr></table>
+<br/>
+
+
+<table>
+<tr><th>Organism</th><th>Cell type</th><th>Studies</th></tr>
+<% count = 0 %>
+<% @h_studies.keys.sort{|a, b| @h_organisms[a].name <=>  @h_organisms[b].name}.each do |organism_id| %>
+ <% @h_studies[organism_id].keys.sort{|a, b| @h_cell_types[a].name <=>  @h_cell_types[b].name}.each do |cell_type_id| %>
+  <tr>
+<td><%= @h_organisms[organism_id].name %></td>
+<td><%= @h_cell_types[cell_type_id].name %></td>
+<td>
+   <%= raw @h_studies[organism_id][cell_type_id].sort.map{ |study|
+# study = @h_studies[organism_id][cell_type_id][i];
+  count+=1
+   "<sup>#{count}</sup>" + study_link(study) + "&nbsp;" + 
+ link_to_function('', "add_study('" + add_to_session_study_path(study.id) + "')", :title => 'add to filter', :class=>'image_link', :style=>"background-image:url(" + image_path('plus-icon.png') +")")
+   }.join(", ") %>
+ </td></tr>
+ <% end %>
+<% end %>
+</table>
+
+<div id = 'div_list_hits'>
+<%= render :partial => 'palmitome_comparison_old' %>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function download_txt(){
+$('#loading').toggleClass('hidden');
+window.location.href='<%= palmitome_comparison_old_path %>?format=txt&ref_organism_id=' +  $('#ref_organism_id').val() + '&nber_studies=' + $('#nber_studies').val() + '&merge_entries=' + (($('#merge_entries').is(':checked')) ? '1' : '0');
+}
+
+function update_list(){
+var p = 'partial=1&ref_organism_id=' +  $('#ref_organism_id').val() + '&nber_studies=' + $('#nber_studies').val() + '&merge_entries=' + '&merge_entries=' + (($('#merge_entries').is(':checked')) ? '1' : '0');
+
+ $.ajax({
+                url: '<%= palmitome_comparison_old_path %>?' + p,
+                type: "get",
+                dataType: "html",
+                data: {},
+		beforeSend: function( xhr ) {
+		  $('#loading').toggleClass('hidden');
+		},
+                success: function(returnData){
+                    var o = $('#div_list_hits');
+		    o.html(returnData);
+		    $('#loading').toggleClass('hidden');                     
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+
+}
+
+function add_study(url){
+  $.ajax({
+                url: url,
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){  
+                   $('#filter_list_studies').html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+//]]>
+</script>

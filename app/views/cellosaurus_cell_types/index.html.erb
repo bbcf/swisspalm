@@ -1,0 +1,21 @@
+<h1>Listing cellosaurus_cell_types</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cellosaurus_cell_types.each do |cellosaurus_cell_type| %>
+  <tr>
+    <td><%= link_to 'Show', cellosaurus_cell_type %></td>
+    <td><%= link_to 'Edit', edit_cellosaurus_cell_type_path(cellosaurus_cell_type) %></td>
+    <td><%= link_to 'Destroy', cellosaurus_cell_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Cellosaurus cell type', new_cellosaurus_cell_type_path %>

@@ -1,0 +1,17 @@
+<%= form_for(@cys_env) do |f| %>
+  <% if @cys_env.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@cys_env.errors.count, "error") %> prohibited this cys_env from being saved:</h2>
+
+      <ul>
+      <% @cys_env.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

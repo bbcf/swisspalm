@@ -1,0 +1,173 @@
+<%= @include_js = javascript_include_tag :protein_cart %>
+
+<%# @subcell %>
+<%# @extracellular_prot %>
+<%# @cytoplasmic_prot %>
+<%# @h_data_by_ali_pos[:topology].to_json %>
+<%# @debug %>
+<%# @topo_doms.to_json %>
+<p id="notice"><%= notice %></p>
+
+<!--<%= link_to 'Back', proteins_path %>-->
+
+<h1><%= link_to "#{@protein.up_ac} - #{@protein.up_id}", "http://uniprot.org/uniprot/" + @protein.up_ac, {} %><%# link_to 'View alignment', view_ali_protein_path(@protein), {:target => '_blank'} %> 
+<%# image_path('file_pdf.png') %>
+<div style='float:right;margin-top:-20px'>
+<%= link_to image_tag("uniprot-medium.gif", :height => 40 , :border => 0, :alt => '', :title => ''), ("http://uniprot.org/uniprot/" + @protein.up_ac) %>
+<%= link_to '', protein_path(@protein, {:format => :pdf}), :class=>'image_link pdf_image', :title => 'PDF', :style=>"background-image:url(" + image_path('file_pdf.png') + ")" %>
+</div>
+</h1>
+
+<ul class='protein_description'>
+
+<%= render :partial => 'show_palm_summary' %>
+
+<li><h2><span class='show_button'>+</span><span>Protein general information</span></h2>
+<div  class='show_content hidden'>
+
+<table class='general_prot_info'>
+<thead><tr>
+<th>UniProt names and subcellular location</th>
+<th>Protein identifiers</th>
+</tr></thead>
+<tbody>
+<tr><td>
+<table class='classic'><tr>
+<th>Protein names</th><th>Subcellular locations</th>
+</tr>
+<tr>
+<td>
+<%= raw @protein.description.split("(").map{|e| e.gsub(/[)]/, '')}.join("<br>") %>
+</td>
+<td><%= raw @subcell.map{|e| e.name + ((e.status > 0) ? (" (" + @h_uniprot_statuses[e.status] + ")") : '')}.join("<br/>") %></td>
+</tr></table>
+
+
+</td><td>
+<table class='classic'>
+<tr><th>Source</th><th>Identifiers</th></tr>
+<% @h_ref_proteins.each_key do |source_type_id| %> 
+<tr><td><%= @h_source_types[source_type_id].description %></td>
+<td><%= @h_ref_proteins[source_type_id].map{|rp| rp.value}.join(', ') %></td>
+</tr>
+<% end %>
+</table>
+<%# raw @protein.isoforms.map{|isoform| isoform.ref_isoforms.map{|ri| ri.value}.join(',')}.join("</br>") %>
+
+</td></tr></tbody></table>
+</div>
+</li>
+
+
+<%= render :partial => 'show_pats_and_apts' %>
+
+<li>
+<h2><span class='show_button'>-</span>Sequences</h2>
+<div class='show_content' id='isoform_sequences'></div>
+</li>
+
+<% if @h_pred.keys.size > 0 %>
+<%= render :partial => 'show_predictions' %>
+<% end %>
+
+<%= render :partial => 'show_phosphosite_features' %>
+
+<% if  @orthologues.size > 0 %>
+<%= render :partial => 'show_orthologues'%>
+
+<li>
+<h2><span class='show_button'>+</span>Orthologue sequences</h2>
+<div class='show_content hidden' id='orthologue_sequences'></div>
+</li>
+<% end %>
+
+<%= render :partial => 'show_go_terms' %>
+
+<% if (lab_user? and @protein.has_hits) or (!lab_user? and @protein.has_hits_public) %>
+<%= render :partial => 'show_hits_and_sites' %>
+<% end %>
+
+<% if (lab_user? and @protein.has_hits) or (!lab_user? and @protein.has_hits_public) %>
+<%= render :partial => 'show_studies' %>
+<%= render :partial => 'show_references' %>
+<% end %>
+
+</ul>
+
+<%# link_to 'Edit', edit_protein_path(@protein) %> 
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+$.ajax({
+                url: "<%= view_ali_protein_path(@protein) %>?partial=1",
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){
+                     $("#isoform_sequences").html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+
+<% if  @orthologues.size > 0 %>
+
+$.ajax({
+                url: "<%= view_ali_ortho_protein_path(@protein) %>?partial=1",
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){
+                     $("#orthologue_sequences").html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+
+<% end %>
+
+$('.protein_description').find("li").each(function(){
+ var li = $(this);
+ li.find('.show_button').click( function(){
+  var button = $(this);
+  button.html((button.html() == '-') ? '+' : '-');
+  li.find('.show_content').each( function(){
+   $(this).toggleClass('hidden');
+  });
+ //alert('toto');
+ });
+});
+
+$('.details_link').find("a").each(function(){
+ var link = $(this);
+ link.click(function(){
+   var o ='';
+  if (link.attr('id') == 'details_1'){
+   o = $('#list_studies').find('.show_button')[0];
+   if (o.innerHTML=='+'){ o.click()} ;
+   o = $('#list_orthologues').find('.show_button')[0]; 
+    if(o.innerHTML=='+'){ o.click()};  
+  }
+  if (link.attr('id') == 'details_2'){
+    o = $('#list_studies').find('.show_button')[0];
+   if (o.innerHTML=='+'){ o.click()} ;
+  }
+  if (link.attr('id') == 'details_3'){
+  o = $('#hits_and_sites_list').find('.show_button')[0];
+   if (o.innerHTML=='+'){ o.click()} ;
+  }
+  if (link.attr('id') == 'details_4'){
+   o = $('#cysteines_summary').find('.show_button')[0];
+   if (o.innerHTML=='+'){ o.click()} ;
+  } 
+ });
+});
+
+
+//]]>
+</script>
+

@@ -1,0 +1,62 @@
+<%= form_for(@study) do |f| %>
+  <% if @study.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@study.errors.count, "error") %> prohibited this study from being saved:</h2>
+
+      <ul>
+      <% @study.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr>
+<td>Title</td><td><%= f.text_field :title %></td>
+</tr>
+<tr>
+<td>Authors</td><td><%= f.text_field :authors %></td>
+</tr>
+<tr>
+<td>PMID</td><td><%= f.text_field :pmid %></td>
+</tr>
+<tr>
+<% l = (2000 .. 2014).to_a.map{|e| [e,e]} %>
+<td>Year</td><td><%= f.select :year, l %></td>
+</tr>
+<tr>
+<% l = Organism.all.map{|e| [e.name, e.id]}.sort %>
+<td>Organism</td><td><%= f.select :organism_id, l %></td>
+</tr>
+<tr>
+<% l = CellType.all.map{|e| [e.name, e.id]}.sort %>
+<td>Cell type</td><td><%= f.select :cell_type_id, l %></td>
+</tr>
+<tr>
+<% l = SubcellularFraction.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', nil]) %>
+<td>Subcellular fraction</td><td><%= f.select :subcellular_fraction_id, l %></td>
+</tr>
+<tr>
+<td>Techniques</td>
+<td>
+<table>
+<% Technique.all.select{|e| e.large_scale}.sort{|a,b| a.name <=> b.name}.each do |t| %>
+<tr><td><%= check_box_tag "study[technique_ids][]", t.id, @study.techniques.include?(t) %></td><td><%= t.name %></td></tr>
+<% end %>
+</table>
+</td>
+</tr>
+<tr>
+<td>In vitro</td><td><%= f.check_box :in_vitro %></td>
+</tr>
+<tr>
+<td>Internal study (hidden to public)</td><td><%= f.check_box :hidden %></td>
+</tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

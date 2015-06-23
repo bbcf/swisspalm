@@ -1,0 +1,17 @@
+<%= form_for(@orthodb_level) do |f| %>
+  <% if @orthodb_level.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@orthodb_level.errors.count, "error") %> prohibited this orthodb_level from being saved:</h2>
+
+      <ul>
+      <% @orthodb_level.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

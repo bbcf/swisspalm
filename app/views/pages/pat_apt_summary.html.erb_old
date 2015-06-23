@@ -1,0 +1,63 @@
+<h1>PAT & APT summary</h1>
+
+<% Organism.all.select{|o|  @final_res[0][o.id] || @final_res[1][o.id]}.sort{|a,b| a.name <=> b.name}.each do |o| %>
+
+<h2><%= o.name %></h2><br/>
+
+<table class='pat_table'><tr>
+<td>List of PATs</td>
+<td>List of APTs</td>
+</tr><tr>
+
+<% (0 .. 1).to_a.each do |i| %>
+<td>
+<% if @final_res[i][o.id] %>
+<table><tr>
+<th>Enzyme's Uniprot AC</th>
+<th>Enzyme's Uniprot ID</th>
+<th>Substrates of PATs</th>
+</tr>
+<% @finalres[i][o.id].keys.sort{|a,b| a.up_ac <=> b.up_ac}.each do |protein| %>
+<tr>
+
+<td><%= link_to protein.up_ac, protein_path(protein) %></td>
+<td><%= link_to protein.up_id, protein_path(protein) %></td>
+
+<% h_sites= {} %>
+<td>
+<table>
+<% @res[i][o.id][protein].keys.sort{|a,b| a.up_ac <=> b.up_ac}.each do |protein_substrate| %>
+<tr><td>
+<%= link_to protein_substrate.up_ac, protein_path(protein_substrate) %>
+</td><td>
+<%= link_to protein_substrate.up_id, protein_path(protein_substrate) %>
+</td><td>
+<% if @res[i][o.id][protein][protein_substrate][nil] %>
+<%= "#{@res[i][o.id][protein][protein_substrate][nil]} position-unspecific evidence#{(@res[i][o.id][protein][protein_substrate][nil] == 1) ? '' : 's'}" %>
+<% else %>
+"No position-unspecific evidence"
+<% end %>
+
+</td><td>
+<%= raw @res[i][o.id][protein][protein_substrate].keys.select{|e| e}.map{|pos| "Cys<sup>#{pos}</sup>(#{@res[i][o.id][protein][protein_substrate][pos]} evidence#{(@res[i][o.id][protein][protein_substrate][pos] == 1) ? '' : 's'})"}.join(', ') %>
+<%# @res[i][o.id][protein][protein_substrate] %>
+</td></tr>
+<% end %>
+</table>
+</td>
+<%# raw @h_pats[o.id][protein].map{|r| site = r.site; protein = site.hit.protein; "#{link_to(protein.up_ac, proteins_path(protein))} Cys<sup>#{site.pos}</sup>"}.uniq.join(", ") %>
+<%#r.siite hit = s.hit; h_sites[link_to(protein.up_ac, protein_path(protein)) + " Cys<sup>" + s.pos + "</sup>"]=1}; h_sites.keys.join(", ") %></td>
+
+</tr>
+<% end %>
+</table>
+<% else %>
+No PAT information
+<% end %>
+
+</td>
+<% end %>
+
+</tr></table>
+
+<% end %>

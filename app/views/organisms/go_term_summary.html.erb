@@ -1,0 +1,88 @@
+<%# form_tag( go_term_summary_organism_path(@organism), {:id => 'download_form'} ) do %>
+<%# hidden_field_tag 'enrichment2' %>
+<%# hidden_field_tag 'nber_prot2' %>
+<%# hidden_field_tag 'ease_score2' %>
+<%# hidden_field_tag 'format' %>
+<%# end %>
+
+<table>
+<tr>
+<td>Minimum enrichment ratio</td>
+<td>
+<% l = (5..100).to_a.map{|e| ["#{e}%", e]} %> 
+<%= select_tag 'enrichment', options_for_select(l, 20), {:onchange => 'update_list()'} %> 
+</tr>
+<tr>
+<td>Minimum number of putative palmitoylated proteins</td>
+<td>
+<% l = (3..200).to_a.map{|e| [e, e]} %>
+<%= select_tag 'nber_prot', options_for_select(l, 10), { :onchange => 'update_list()' } %>
+</tr>
+<tr>
+<td>Maximum EASE score (modified p-value)</td>
+<td>
+<%# l= (1 .. 500).to_a.map{|e| [e, e]} %>
+<%= text_field_tag 'ease_score', '0.01', { } %>
+<%= link_to_function 'Update', 'update_list({})' %>
+|
+<%= link_to_function 'Download', "update_list({'format' : 'text'})" %>
+</tr>
+
+</table>
+
+<div id='results'></div>
+<%# render :partial => 'go_term_summary' %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function update_list(p){
+ var h={ 
+  'enrichment' : $('#enrichment').val(),
+  'nber_prot' : $('#nber_prot').val(),
+  'ease_score' : $('#ease_score').val(),
+  'format' : (p && p.format) ? p.format : 'html',
+  'partial' : 1,
+  'dataset' : '<%= @dataset %>'
+ };
+
+if (h.format == 'html'){
+
+ $.ajax({
+                url: "<%= go_term_summary_organism_path(@organism) %>",
+                type: "get",
+                dataType: "html",
+                data: h,
+                beforeSend: function(){
+                  $('#loading').toggleClass('hidden');
+                },
+                success: function(returnData){
+                  $('#loading').toggleClass('hidden');
+                  $('#results').html(returnData)
+              	},
+                error: function(e){
+                  alert(e);
+                }
+ });
+ 
+}else{
+/*
+$('#enrichment2').val(h.enrichment);
+$('#nber_prot2').val(h.nber_prot);
+$('#ease_score2').val(h.ease_score);
+$('#format').val(h.format);
+
+$('#download_form').submit();
+*/
+query_params = "enrichment=" + h.enrichment + ";nber_prot=" + h.nber_prot + ";ease_score=" + h.ease_score 
+
+window.location = "<%= go_term_summary_organism_path(@organism) %>." + h.format + "?" + query_params;
+
+}
+
+}
+
+update_list();
+
+//]]>
+</script>

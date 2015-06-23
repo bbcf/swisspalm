@@ -1,0 +1,123 @@
+<table id='list_hits' class='protein_table'>
+<thead>
+  <tr>
+    <th>#</th>
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>Name</th>
+    <th>Gene names</th>
+<% @all_studies.each_index do |i| %>
+   <% if @h_hits[@all_studies[i].id] %>
+  <th><%= link_to i+1, study_path(@all_studies[i].id), {:title=>@all_studies[i].authors + ", " + @all_studies[i].year.to_s} %></th>
+   <% end %>
+<% end %>
+<% count_line = 1 %>
+<% organisms = @h_studies.keys.map{|sid| @h_organisms[sid]}.uniq %>
+<% if organisms.size > 1 %>
+<th>List of involved homologues</th>
+<% end %>
+<th># of palmitome studies</th>
+<th># of targeted studies</th>
+<th># of different techniques</th>
+<th># of annotated sites</th>
+  </tr>
+
+</thead>
+<tbody>
+
+<% @proteins.each do |protein| %>
+  <tr>
+    <td><%= count_line %></td>
+    <td><%= format_up_ac(protein) %></td>
+    <td><%= protein.up_id %></td>
+    <td class='small'><%= protein.description %></td>
+    <td><%= @h_gene_names[protein.id].join(', ') %></td>
+<% count =0 %>
+
+<% @studies.each do |study| %>    
+    <td>
+<% if (@h_hits[study.id][protein.id]) %>
+ <% hits = @h_hits[study.id][protein.id] %>
+ <%= raw hits.map{ |h|
+  hl = @h_hit_lists[h.hit_list_id];
+ (hl) ? (
+  (hl.confidence_level_id) ? @h_confidence_levels[hl.confidence_level_id].tag : ((hl.label!= '') ? hl.label : 'Yes')
+ ) : 'Paper'
+ }.uniq.join(",<br/>")
+ %>
+<% else %>
+-
+<% end %>
+</td>
+<%# end %>
+<%# end %>
+<% end %>
+
+<% if organisms.size > 1 %>
+<td><%= raw @h_homologues_by_prot[protein.id].keys.map{|pid| p=@h_proteins[pid]; ((p) ? link_to(p.up_id, protein_path(p)) : 'NA')}.join(", ") %></td>
+<% end %>
+<td><%= @h_study_by_prot[protein.id].keys.size %> <%# @studies.select{|s| @h_study_by_prot[protein.id][s.id] and s.organism_id == protein.organism_id}.size %></td>
+<td><%= @h_targeted_studies[protein.id].size %> 
+<td><%= (@h_targeted_studies[protein.id] + @h_study_by_prot[protein.id].keys).uniq.map{|study_id| @h_techniques_by_study[study_id]}.flatten.uniq.compact.size  %></td>
+<td><%= @annotated_sites.select{|e| hit = @h_annotated_hits[e.hit_id]; (@h_orthologues[hit.protein.id] and @h_orthologues[hit.protein.id].include?(protein.id)) or hit.protein.id == protein.id}.size %> 
+
+  </tr>
+<% count_line += 1 %>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+// update form parameters
+$('#nber_studies').val(<%= params[:nber_studies] %>);
+
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+	 "fnDrawCallback": function ( oSettings ) {
+                        /* Need to redo the counters if filtered or sorted */
+                        if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                                for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+                                {
+                                        jQuery('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                                }
+                        }
+                },
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+/*"aoColumns": [
+            null,
+            null,
+            null,
+            null,
+	<% @all_studies.each_index do |i| %>
+<% if @h_hits[@all_studies[i].id] %>
+          null,
+<% end %>
+        <% end %>
+         {"sType": "numeric"},
+	 {"sType": "numeric"},
+         {"sType": "numeric"}
+        ],
+*/
+        "sDom": 'Wfrt',	
+	"aaSorting": [[ <%= @h_hits.keys.size + 6 %>, "desc" ]],
+        "iDisplayLength": <%= @proteins.size %>
+        })
+});
+
+//]]>
+</script>
+
+
+<%# @h_all_proteins.values.map{|e| "#{e.id}: #{e.up_id}"}.to_json %>
+<%# @h_homologues_by_prot[15472].keys.to_json %>
+<%# @h_orthologues[6237].to_json %>
+<%# @h_orthologues[94473].to_json %>
+<%# @h_homologues_by_prot[6237].to_json %>
+<%# @h_homologues_by_prot[94473].to_json %>

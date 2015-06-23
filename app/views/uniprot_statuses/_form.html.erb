@@ -1,0 +1,17 @@
+<%= form_for(@uniprot_status) do |f| %>
+  <% if @uniprot_status.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@uniprot_status.errors.count, "error") %> prohibited this uniprot_status from being saved:</h2>
+
+      <ul>
+      <% @uniprot_status.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

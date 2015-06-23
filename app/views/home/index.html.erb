@@ -1,0 +1,24 @@
+
+<%# form_tag proteins_path, :method => 'get' do %>
+
+<table id='search_home'><tr><td style='width:50%;text-align:right'>
+<div id='search_input'><%= autocomplete_field_tag 'ref_palm_value', '', autocomplete_proteins_path, :size => 75 %></div></td>
+<td style='text-align:left;padding-left:10px'><div id='div_search' onclick="upd()">Search</div></td></tr>
+</table>
+
+<%# end %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+
+function upd(){
+
+var term = $("#ref_palm_value").val();
+
+window.location('<%= proteins_path() %>?term=' + term);
+
+}
+
+//]]>
+</script>

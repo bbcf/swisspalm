@@ -1,0 +1,166 @@
+<div class='explanation'>
+The following search tool will provide a list of UniProtKB entries. For more information on the free text search, please click the question mark button. 
+To get a quicker answer from our server, you can search on a subset of total proteins, by selecting a specific organism or a given dataset of proteins.
+Query results can still be filtered using the box on the top left side of the result table. Final results can be downloaded following the link "Download to tab file".
+</div>
+
+<%= form_tag( download_proteins_path, {:id => 'download_form'} ) do %>
+<%= hidden_field_tag 'id_list' %>
+<%= hidden_field_tag 'format', 'html', {:id => 'format2'} %>
+<% end %>
+<%# debug session %>
+<%= link_to 'Evaluate a hit list file', evaluate_hit_lists_path if admin? %>
+
+<%=  form_tag(batch_search_proteins_path, :id => 'search_form', :multipart => true) do %>
+<%= hidden_field_tag 'format', 'html', {:id => 'format'} %>
+<table class='search_home'><tr><td style='width:600px;text-align:right'>
+<div id='search_input_main'><%= autocomplete_field_tag 'ref_palm_value', params[:term] || '', autocomplete_proteins_path, :size => 125 %></div>
+<div id='search_help_main'>Advanced search<%# image_tag 'question_mark.png', :height => '32px' %></div>
+<div id='search_helper_container'>
+<%= render :partial => 'shared/helper' %></div>
+</td>
+<td style='text-align:left;padding-left:10px;width:100px'><div id='div_search' onclick='upd()'>Search</div></td>
+<td> 
+<table id='prot_search_options'><tr><td>
+Species:</td><td>
+<% l = Organism.all.map{|e| [e.shortname || e.name, e.id]}.sort %>
+<% l.unshift(["All", nil]) %>
+<%= select_tag :organism_id, options_for_select(l, session[:organism_id]), {:onchange => 'change_db()'} %>
+</td></tr><tr><td>
+<% l = [['All proteins', 'all'], 
+['Proteins predicted to be palmitoylated', 'pred'], 
+['Palmitoylated proteins (palmitoyl-proteome or targeted studies)', 'palm'], 
+['Palmitome hits validated by 2 independent method palmitoyl-proteomes or targeted studies', 'meth']#,
+#['Same as above but without redundant TrEMBL entries', 'meth2']
+] %>
+Dataset:</td><td>
+<%= select_tag 'db', options_for_select(l, 'palm'), {:onchange => 'change_db()'} %>
+<!--
+<%# radio_button_tag 'db', 'palm', (session[:search_db] == 'palm') ?  true : false, {:onclick => 'change_db()'} %><%# @all_palm_proteins.size  %> Palmitoylated proteins <br/>
+<%# radio_button_tag 'db', 'pred', (session[:search_db] == 'pred') ?  true : false, {:onclick => 'change_db()'} %><%# @all_palm_proteins.size  %> Proteins predicted to be palmitoylated <br/>
+<%# radio_button_tag 'db', 'all', (session[:search_db] == 'all') ?  true : false, {:onclick => 'change_db()'} %><%# @all_proteins_count %> All proteins
+--><br/>
+</td></tr></table>
+</td>
+</tr>
+</table>
+
+<!--<tr><td style='text-align:left'>-->
+<div style='position:relative;top:-33px'>
+or BATCH SEARCH: submit a list of identifiers in a tab/csv file (in the first column) <%= file_field_tag 'file' %>
+</div>
+<% end %>
+
+<div id ='div_protein_list'>
+<% if @proteins %>
+<%= render :partial => 'index' %>
+<% end %>
+</div>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function change_db(){
+
+//var db = $("input[name=db]:radio:checked").val();
+var db = $("#db").val();
+var organism_id = $("#organism_id").val();
+
+$.ajax({
+                url: "<%= change_db_proteins_path %>",
+                type: "get",
+                dataType: "html",
+                data: {"db" : db, "organism_id" : organism_id},
+                beforeSend: function(){ 
+                  $('#loading').toggleClass('hidden');
+                },
+                success: function(returnData){
+                  $('#loading').toggleClass('hidden');
+	       //if ($("#ref_palm_value").val() != '')
+                 // upd();
+                },
+                error: function(e){
+                  alert(e);
+                }
+            });
+
+}
+
+function upd(){
+
+//var formData = new FormData($("#search_form")[0]);
+// var reader = new FileReader();
+//reader.readAsText($("#file"))
+
+var filename  = $('#file').val();
+
+if (!filename || filename == ''){
+$.ajax({
+                url: "<%= search_proteins_path %>",
+                type: "get",
+//		enctype:"multipart/form-data",
+                dataType: "html",
+                data: {"term" : $("#ref_palm_value").val(), "format" : $("#format").val()}, 
+		beforeSend: function(){
+		  $('#loading').toggleClass('hidden');
+		},
+                success: function(returnData){
+                     $("#div_protein_list").html(returnData);
+		     $('#loading').toggleClass('hidden');
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}else{
+//alert(filename)
+$('#loading').toggleClass('hidden');
+$('#search_form').submit();
+}
+}
+
+
+
+$("#ref_palm_value").keydown(function(event){
+    if(event.keyCode == 13){
+        $("#div_search").click();
+	event.preventDefault();
+        this.blur();
+        return false;
+    }
+});
+
+if ($("#ref_palm_value").val() != ''){
+   upd();
+}
+
+
+
+$(document).ready( function(){
+    $(".cb-enable").click(function(){
+        var parent = $(this).parents('.switch');
+        $('.cb-disable',parent).removeClass('selected');
+        $(this).addClass('selected');
+//        $('.checkbox',parent).attr('checked', true);
+    });
+    $(".cb-disable").click(function(){
+        var parent = $(this).parents('.switch');
+        $('.cb-enable',parent).removeClass('selected');
+        $(this).addClass('selected');
+//        $('.checkbox',parent).attr('checked', false);
+    });
+});
+
+$(document).ready(function(){
+  $("#search_help_main").click(function(){
+  if ($("#search_helper_container").css('display') == 'none'){
+    $("#search_helper_container").slideDown("slow");
+  }else{
+    $("#search_helper_container").slideUp("slow");
+  }
+  });
+});
+
+//]]>
+</script>

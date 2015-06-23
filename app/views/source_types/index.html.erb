@@ -1,0 +1,21 @@
+<h1>Listing source_types</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @source_types.each do |source_type| %>
+  <tr>
+    <td><%= link_to 'Show', source_type %></td>
+    <td><%= link_to 'Edit', edit_source_type_path(source_type) %></td>
+    <td><%= link_to 'Destroy', source_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Source type', new_source_type_path %>

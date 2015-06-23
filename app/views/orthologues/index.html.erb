@@ -1,0 +1,21 @@
+<h1>Listing orthologues</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orthologues.each do |orthologue| %>
+  <tr>
+    <td><%= link_to 'Show', orthologue %></td>
+    <td><%= link_to 'Edit', edit_orthologue_path(orthologue) %></td>
+    <td><%= link_to 'Destroy', orthologue, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Orthologue', new_orthologue_path %>

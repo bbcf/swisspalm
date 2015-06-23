@@ -1,0 +1,17 @@
+<%= form_for(@confidence_level) do |f| %>
+  <% if @confidence_level.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@confidence_level.errors.count, "error") %> prohibited this confidence_level from being saved:</h2>
+
+      <ul>
+      <% @confidence_level.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,2 @@
+module OrthodbBestOrthologuesHelper
+end

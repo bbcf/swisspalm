@@ -1,0 +1,30 @@
+
+<% h2 = {
+	  :admin => ['Admin section', admin_path]
+} %>
+
+<%# t.push(t2) if lab_user? %>
+
+
+<%# t.push(t3) if admin? %>
+<%# t.push(t4) %>
+
+<%# raw t.flatten.join(' ') %>
+
+<% t = [] %>
+<%# request.original_url %>
+<%# root_path %>
+<% @h_menu.each_key do |k| %>
+<% if ![:admin, :stats].include?(k) or admin? %>
+<% link = link_to(@h_menu[k][0], @h_menu[k][1], {:class => 'section_tab' + ((session[:menu] == k) ? ' sel_tab' : '') }) %>
+<% t.push(link) %>
+<% end %>
+<% end %>
+
+<div id='menu'>
+<%= raw t.flatten.join(' ') %>
+</div>
+<div id='submenu'>
+<%= render :partial => 'shared/sublinks' %>
+</div>
+<br/>

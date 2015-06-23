@@ -1,0 +1,32 @@
+<% h = {} %>
+<% @h_seq.each_index do |chunk_i| %>
+<% h_seq = @h_seq[chunk_i] %>
+<table id='orthologue_sequences'>
+<thead>
+<tr>
+<th></th><th></th>
+<% if h_seq[@lead_identifier].size < 11 %>
+<th><%= raw (chunk_i*100 +1) %></th>
+<% else %>
+<%= raw (0 .. (h_seq[@lead_identifier].size/10).to_i-1).to_a.map{|i| "<th>#{chunk_i*100 + i*10+1}</th>"}.join('') %>
+<% end %>
+</tr>
+</thead>
+<tbody>
+<% h_seq.keys.sort.each do |identifier| %>
+<% h[identifier]||=0 %>
+ <% t = h_seq[identifier].scan(/[\w\-]{1,10}/) %>
+ <tr><td class='header'><%= identifier %></td><td><%= o = Protein.find_by_up_ac(identifier.split("-").first).organism; o.common_name || o.shortname || o.name %></td>
+ <% t.each do |e| %>
+  <td class='seq'>
+<% e.split('').each do |e2| %>
+<%= raw ((e2 == 'C') ? "<span class='hightlight' title='#{h[identifier]}'>C</span>" : e2)-%>
+<% h[identifier] += 1 if e2 != '-' %>
+<% end %>
+</td>
+ <% end %>
+ </tr>
+<% end %>
+</tbody>
+</table>
+<% end %>

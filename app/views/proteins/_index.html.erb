@@ -1,0 +1,206 @@
+<%= @include_js = javascript_include_tag :protein_cart %>
+
+<%# @test %>
+<%# @sites_by_protein.to_json %>
+<%# @h_hits.to_json %>
+<%# session[:proteins].to_json %>
+<div class='info_search'>
+<% if @proteins.size > 0 %>
+ <% id_list_text = (@id_list) ? (' among ' + @id_list.size.to_s + " evaluated IDs (~#{(@proteins.size.to_f * 100 / @id_list.size).to_i}%)</b>: " + raw(@id_list.join(', '))) : '</b>' %>
+<b> <%= @count_proteins %> protein<%= (@count_proteins == 1) ? '' : 's' %> found<%= raw id_list_text %> (<%= link_to_function 'Download', "download_all('text')" %> complete results).
+<br/>
+<% end %>
+<% if @proteins.size != @count_proteins -%> 
+<span class='important-info'>Only <%= @proteins.size %> displayed.</span>
+<% end %>
+<br/>
+<% if @not_found and @not_found.size > 0 %>
+<br/>
+<b> <%= @not_found.size %> identifier<%= (@not_found.size ==1) ? '' : 's' %> not found</b>: <%= @not_found.join(", ") %>.
+<br/>
+
+<% end %>
+<br/>
+*HC = High Confidence
+<br/>
+<br/>
+</div>
+
+<% if @proteins.size > 0 %>
+
+<table id ='list_proteins' class='protein_table'>
+<thead>
+  <tr>
+    <th>#</th>	
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>UniProt status</th>
+    <th>Organism</th>
+    <th>Description</th>
+    <th># palmitome studies</th>
+    <th>Only in internal studies</th>
+    <th># targeted studies</th>
+    <th># of known sites</th>
+    <th># of distinct techniques</th>    
+<!--    <th>Max number of cysteines</th> -->
+<!--    <th>Has hits?</th>-->
+<!--    <th>Predicted to be palmitoylated</th>-->
+    <th>Predicted cytosolic sites</th>
+    <th>Max number of cysteines</th>
+<!--    <th># palmitome studies</th> 
+    <th># targeted studies</th>
+    <th># of distinct techniques</th>
+    <th># of known sites</th> -->
+    <th># of isoforms</th>
+<!--    <th>Potential false positive</th> -->	
+    <% if admin? %>
+	<th>Home study P value</th>
+    <% end %>
+<!--    <th>GO</th>-->
+  </tr>
+</thead>
+<tbody>
+
+ <% @proteins.each_index do |i| %>
+<% protein = @proteins[i] %>
+  <tr id='protein_<%= protein.id %>'>
+<td><%= i %></td>
+<td><%# check_box_tag(('protein_' + protein.id.to_s), 0, session[:proteins][protein.id], {:class => 'checkbox_protein', :onclick => "upd_protein_cart('#{upd_cart_protein_path(protein)}')"}) %> 
+<%= format_up_ac(protein) %>
+<%# link_to 'UniProt', ('http://uniprot.org/uniprot/' + protein.up_ac), :class => 'small external' %>
+</td>
+<td><%= protein.up_id %></td>
+<td class='center'><%= uniprot_status(protein) %></td>
+<td><%= (protein.organism_id) ? @h_organisms[protein.organism_id].name : 'NA' %></td>
+<td class='small'><%= protein.description %></td>
+<!-- <td class='center'><%= (protein.has_hits == true) ? 'Yes' : 'No' %></td> -->
+<% hits = @hits_by_protein[protein.id] %>
+<% studies = hits.select{|h| s= @h_studies[h.study_id]; (lab_user? or s.hidden == false)}.map{|h| @h_studies[h.study_id]}.uniq 
+ large_scale_studies = studies.select{|s| s.large_scale} 
+       hidden_studies=  hits.map{|h| h.study}.uniq.select{|s| s.hidden == true}.uniq
+       hidden_large_scale_studies = hidden_studies.select{|s| s.large_scale} %>
+
+
+<%  nber_hc =  @hit_lists_by_protein[protein.id].keys.compact.map{|hl_id| @h_hit_lists[hl_id]}.select{|hl| hl.confidence_level and hl.confidence_level.tag == 'HC'}.map{|hl| hl.study_id}.uniq.size %>
+<td class='center'><%= large_scale_studies.size %>/<%= @h_nber_studies_by_organism[protein.organism_id] %>
+<% if nber_hc > 0 -%>
+<br/><span class='small'><%= nber_hc %> in HC<sup>*</sup> list
+<% end %>
+</td>
+<td class='center'><%= (large_scale_studies.size == 0) ? 'NA' : ((large_scale_studies.size == hidden_large_scale_studies.size) ? 'Yes' : 'No') %></td>
+<td class='center'><%= studies.select{|s| s.large_scale == false}.size %></td>
+<td class='center<%= (@nber_sites_by_protein[protein.id] > 0) ? ' highlight_good' : '' %>'><%= @nber_sites_by_protein[protein.id] %></td>
+<% nber_techniques = (lab_user?) ? protein.nber_technique_categories_labuser : protein.nber_technique_categories_public %>
+<td class='center<%= ' highlight_good' if nber_techniques > 1 %>'><%= nber_techniques %><%#studies.select{|s| s.large_scale}.map{|s| s.techniques.map{|e| e.technique_category}.compact}.flatten.uniq.size %></td>
+<%# @sites_by_protein[protein_id].flatten.map{|s| {:pos => s.pos, :isoform => s.hit.isoform}}.uniq.size %>
+<!-- <td class='center'><%= (protein.has_hc_pred == true) ? 'Yes' : 'No' %></td> -->
+<td class='center'><%= (protein.has_hc_pred_valid == true) ? 'Yes' : 'No' %></td>
+<td class='center'> <span class='<%= (protein.nber_cys_max == 0) ? 'highlight_bad' : '' %>'><%= protein.nber_cys_max %></span></td>
+<td class='center'><%= @nber_isoforms[protein.id] %></td>
+<!-- <td class='center'><%= ( protein.fp_chem == true or protein.fp_label == true or protein.fp_go == true) ? 'FP' : '-' %></td> -->
+ <% if admin? %>
+<td>   <%= 'NA' %></td>
+<% end %>
+<!--<td><%# raw protein.protein_go_associations.select{|e| e.parent == false}.map{|e| e.go_term.name}.join("<br/>") %> -->
+<!--    <td><%= link_to 'Show', protein %></td>
+    <td><%= link_to 'Edit', edit_protein_path(protein) %></td>
+    <td><%= link_to 'Destroy', protein, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+-->  
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<br/>
+<!--
+<br/>
+*HC = High Confidence
+<br/>
+-->
+<%# link_to('New Protein', new_protein_path) if admin? %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+//update id_list
+$("#id_list").val('<%= params[:id_list] %>')
+
+// hide the list from search box
+var el = $("ul.ui-autocomplete.ui-menu.ui-widget.ui-widget-content.ui-corner-all");
+el.hide();
+
+function download_all(format){
+
+<% if !request.path.match(/batch/) %>
+ var p = "term=" + $("#ref_palm_value").val() + "&format=" + format
+ window.location = "<%= search_proteins_path  %>?" + p
+<% else %>
+download_protein_list('text')
+<% end %>
+}
+
+function download_protein_list(format){
+if (!format)
+ format = 'text'
+
+var list_ids = [];
+var t = document.getElementById("list_proteins");
+
+/*$('#list_proteins > tbody  > tr').each(function() {
+list_ids.push(row.id)
+})*/
+
+for(var i=0; i < t.rows.length; i++){
+ var row = t.rows[i];
+ if (row.id && row.id != ''){
+  list_ids.push(row.id);
+ }
+}
+$('#id_list').val(list_ids);
+$('#format2').val(format);
+
+$('#download_form').submit();
+
+}
+
+ jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_proteins').dataTable( {
+	 "fnDrawCallback": function ( oSettings ) {
+                        /* Need to redo the counters if filtered or sorted */
+                        if ( oSettings.bSorted || oSettings.bFiltered )
+                        {
+                                for ( var i=0, iLen=oSettings.aiDisplay.length ; i<iLen ; i++ )
+                                {
+                                        jQuery('td:eq(0)', oSettings.aoData[ oSettings.aiDisplay[i] ].nTr ).html( i+1 );
+                                }
+                        }
+                },
+        "oLanguage": {
+            "sSearch": "<span class='important'>Filter all columns</span><span> (<%= raw link_to_function("Download", "download_protein_list()").gsub(/"/, "'") %>):</span>"
+        },
+        "sDom": 'Wfrt', //Wlfrt
+	 "aoColumnDefs": [
+          { 'bSortable': false, 'aTargets': [ 0 ] }
+       ],
+//	"oTableTools": {
+ //           "sSwfPath": "/assets/DataTables-1.8.2/extras/TableTools/media/swf/copy_csv_xls_pdf.swf"
+ //       },
+//"aaSorting": [[ 4, "asc" ], [2, "asc"]],
+"aaSorting": [[2, "asc"]],
+        "iDisplayLength": <%= @proteins.size %>
+        });
+     jQuery('#list_proteins').bind('filter', function(){ jQuery('#nber_selected').html(oTable.fnSettings().fnRecordsDisplay()) })
+});
+
+$('#format').val('html');
+$('#format2').val('html');
+
+add_question_marks();
+
+//]]>
+</script>
+
+<% else %>
+<span class='no-results'>No results found.</span>
+<% end %>

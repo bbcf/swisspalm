@@ -1,0 +1,89 @@
+<% h_disulfide = {0 => 'no', 1 => 'yes'} %>
+<% h_ss = {nil => 'NA', '' => 'NA', 1 => 'H', 2 => 'E', 3 => 'C'} %>
+<% h_topo = {0 => 'na', 1 => 'extra', 2 => 'mem', 3 => 'intra'} %>
+<% h_topo2 = {0 => 'Undefined', 1=>'Extracellular/Lumenal', 2=> 'Transmembrane', 3=> 'Cytosolic/Nuclear'} %>
+<%# @chunks.to_json %>
+<%# @pos_ali %>
+<li id='cysteines_summary'><h2><span class='show_button'>-</span>Cysteines</h2>
+<div class='show_content'>
+<!--<ul>
+<li><h3>CSS-Palm 4.0</h3>-->
+
+<%# @h_data_by_ali_pos[:disulfide].to_json %>
+
+<% if @h_pred[@h_pred.keys.first].keys.size > 0 %>
+<% @chunks.each do |chunk| %>
+<table class = 'cysteines' <%= "style='width:100%'" if params[:format] == 'pdf' %>>
+<thead>
+<tr>
+<th class='first'>Pos in alignment</th>
+<%= raw chunk.map{|pos| "<th>#{pos}</th>"}.join('') %>
+</tr>
+</thead>
+<tbody>
+<tr class='topology'><td class='first'>Topology</td> <%= raw chunk.map{|pos|
+topo1 = h_topo[@h_data_by_ali_pos[:topology][pos]] || 'na';
+topo2 = (h_topo2[@h_data_by_ali_pos[:topology][pos]]) ? h_topo2[@h_data_by_ali_pos[:topology][pos]].first : 'U'; 
+ "<td class='val #{topo1}'>#{topo2}</td>"}.join('') %></tr>
+<tr class='disulfide'><td class='first'>Disulfide</td> <%= raw chunk.map{|pos| "<td class='#{h_disulfide[@h_data_by_ali_pos[:disulfide][pos]]}'>#{h_disulfide[@h_data_by_ali_pos[:disulfide][pos]]}</td>"}.join('') %></tr>
+<tr><td class='first'>SS prediction</td><%= raw chunk.map{|pos| "<td>#{(@h_pred[@main_iso][pos]) ? h_ss[@h_pred[@main_iso][pos][4]] : ''}</td>"}.join('') %></tr>
+<tr><td class='first'>SS UniProt</td><%= raw chunk.map{|pos| "<td>#{(@h_pred[@main_iso][pos]) ? h_ss[@h_pred[@main_iso][pos][3]] : ''}</td>"}.join('') %></tr>
+<% @h_pred.keys.sort.each do |iso| %>
+<tr>
+<td class='first'>Isoform <%= iso %><br/><%= raw (iso == @main_iso) ? '[Main isoform]' : '' %></td>
+<% chunk.each do |ali_pos| %>
+ <% pos = @h_pos_ali[iso][ali_pos] %>
+ <td>
+<% if  @h_pred[iso][pos] %>
+<% pp_score = "<br/><span class='small " + ((@h_pred[iso][pos][0].pp_score > 0.4) ? 'bold hc' : ((@h_pred[iso][pos][0].pp_score < 0.4 and @h_pred[iso][pos][0].pp_score > 0.1) ? 'mc' : ((@h_pred[iso][pos][0].pp_score < 0.1 and @h_pred[iso][pos][0].pp_score > 0) ? 'lc' : 'not_predicted'))) + "'>" + @h_pred[iso][pos][0].pp_score.to_s + "</span>" if @h_pred[iso][pos][0].pp_score %>
+<%= raw ("<span class='#{(@h_pred[iso][pos][0].hc_pred) ? ((@h_pred[iso][pos][0].compatible_loc) ? 'hc' : 'not_validated') : 'not_predicted'}'><span class='#{'bold' if @h_pred[iso][pos][1] == 'hc'}'>Cys<sup>#{pos}</sup></span><br/>
+<span class='small #{'bold' if @h_pred[iso][pos][1] == 'hc'} #{@h_pred[iso][pos][1]}'>#{@h_pred[iso][pos][0].cp_score}</span>" + 
+(pp_score || '') +
+"</span>") if pos %>
+<% end %>
+</td>
+<% end %>
+</tr>
+<% end %>
+</tbody>
+</table>
+<br/>
+<% end %>
+
+Legend:
+<table class='legend'>
+<tr>
+<td>Topology</td><td>
+<table class='sub_legend'>
+<tr class='topology'><td>
+<%= raw h_topo2.keys.sort.map{|k| "</td><td class='val " + h_topo[k] + "'>#{h_topo2[k].first}</td><td>" + h_topo2[k] }.join("</td></tr><tr class='topology'><td>") %>
+</td></tr>
+</table>
+</td></tr>
+<tr>
+<td>Prediction scores</td>
+<td>
+From top to bottom: Cysteine position, CSS-Palm 4.0 score, PalmPred score<br/>
+Color code for cysteine position: 
+<span class='hc'>Predicted (high confidence prediction with CSS-Palm or/and PalmPred)</span> / <span class='not_validated'>Predicted but not validated (in terms of disulfide bond and cellular location)</span> / <span class='not_predicted'>Not predicted</span><br/>
+Color code for CSS-Palm 4.0: <span class='hc'>High confidence</span>,
+<span class='mc'>Medium confidence</span>,
+<span class='lc'>Low confidence</span>,
+<span class='not_predicted'>Not predicted</span>.<br/>
+Color code for PalmPred: <span class='hc'>High confidence (score > 0.4)</span>,
+<span class='mc'>Medium confidence (0.1 > score > 0.4)</span>,
+<span class='lc'>Low confidence (score < 0.1)</span>,
+<span class='not_predicted'>Not predicted</span>.
+</td>
+
+</tr></table>
+
+
+<% else %>
+No CSS-Palm 4.0 prediction available for this protein yet
+<% end %>
+
+<!--</li>
+</ul>-->
+</div>
+</li>

@@ -1,0 +1,55 @@
+
+<p><b><%=  @h_data[:nber_prot_in_targeted_study][0] %></b> proteins are known to be palmitoylated from the literature but are not shown as palmiloylated in any palmitome study (across all species using known protein homologies).</p>
+<%=  @h_data[:nber_prot_in_targeted_study_pred][0] %> of them have a least one cysteine predicted to be palmitoylated with high confidence (CSSPalm 4.0).
+
+<%# @h_data[:nber_prot_in_palmitome_study_pred][0] %>
+
+<table id='list_hits' class='protein_table'>
+<thead>
+  <tr>
+<th># studies</th>
+<th># palmitoylated proteins in palmitomes</th>
+<th># annotated palmitoylated proteins</th>
+<th># palmitoylated proteins in palmitomes with at least one HC prediction</th>
+<th>%</th>
+<th># annotated palmitoylated proteins with at least one HC prediction</th>
+<th>%</th>
+  </tr>
+
+</thead>
+<tbody>
+<% (1 .. @all_studies.size).to_a.each do |i| %>
+<tr><td><%= i %><% "(Known as palmitoylated in the literature but not shown in palmitome studies)" if i == 0 %></td>
+<td><%= @h_data[:nber_prot_in_palmitome_study][i] %></td>
+<td><%= @h_data[:nber_prot_in_targeted_study][i] %></td>
+<td><%= @h_data[:nber_prot_in_palmitome_study_pred][i] %></td> 
+<td><%= ( @h_data[:nber_prot_in_palmitome_study][i]  > 0) ? (@h_data[:nber_prot_in_palmitome_study_pred][i].to_f * 100 / @h_data[:nber_prot_in_palmitome_study][i] ).to_i : 0 %></td>
+<td><%= @h_data[:nber_prot_in_targeted_study_pred][i] %></td> 
+<td><%= (@h_data[:nber_prot_in_targeted_study][i] > 0) ? (@h_data[:nber_prot_in_targeted_study_pred][i].to_f * 100 / @h_data[:nber_prot_in_targeted_study][i]).to_i : 0 %></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+// update form parameters
+$('#nber_studies').val(<%= params[:nber_studies] %>);
+
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+"aaSorting": [[ 0, "desc" ]],
+        "sDom": 'Wfrt',	
+        "iDisplayLength": <%= @all_studies.size %>
+        })
+});
+
+//]]>
+</script>
+

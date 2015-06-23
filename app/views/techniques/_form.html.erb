@@ -1,0 +1,47 @@
+<%= form_for(@technique) do |f| %>
+  <% if @technique.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@technique.errors.count, "error") %> prohibited this technique from being saved:</h2>
+
+      <ul>
+      <% @technique.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr><td>Parent</td>
+<% l = Technique.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', '']) %>
+<td><%= f.select :parent_id, l %></td>
+</tr>
+<tr>
+<td>Name</td>
+<td><%= f.text_field :name %></td>
+</tr>
+<tr>
+<td>Class</td>
+<% l = TechniqueClass.all.map{|e| [e.name, e.id]} %>
+<% l.unshift(["NA", nil]) %>
+<td><%= f.select :technique_class_id, l %></td>
+</tr>
+<tr>
+<td>Category</td>
+<% l = TechniqueCategory.all.map{|e| [e.name, e.id]} %>
+<% l.unshift(["NA", nil]) %>
+<td><%= f.select :technique_category_id, l %></td>
+</tr>
+<tr>
+<td>Used in large scale studies</td><td><%= f.check_box :large_scale %></td>
+</tr>
+<tr>
+<td>Used for site characterization</td><td><%= f.check_box :site_characterization %></td>
+</tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

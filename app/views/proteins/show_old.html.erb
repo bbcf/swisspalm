@@ -1,0 +1,50 @@
+<!--
+<br/><br/>
+<% isoforms = @isoforms.select{|i| i.hits.size > 0 } %>
+<% if isoforms.size > 0 %>
+Isoform_specific
+
+<table>
+<%# isoforms.each do |i| %>
+<tr><td>
+Isoform <%# i.isoform %>
+</td><td>
+<table>
+<tr>
+<th>Study #</th>
+<th>Hit ID</th>
+<th>Sites</th>
+</tr>
+<%# i.hits.each do |hit| %>
+<tr>
+<td>Study <%= @h_studies[hit.study.id] + 1 %></td>
+<td><%= "SPalmH:" + hit.id.to_s %></td>
+<td><%= raw (hit.sites.size > 0) ? hit.sites.map{|e| "SPalmS:#{e.id}: Cys<sup>" + e.pos.to_s + "</sup>"}.join(',') : "<span style='font-style:italic'>None</span>" %></td>
+</tr>
+<%# end %>
+</table>
+</td></tr>
+<%# end %>
+</table>
+<%# else %>
+<span style='font-style:italic'>Unknown isoform specific hits.</span>
+<% end %>
+
+<%# else %>
+
+<table>
+<tr>
+<th>Study #</th>
+<th>Hit ID</th>
+<th>Sites</th>
+</tr>
+<%# @hits.each do |hit| %>
+<tr>
+<td>Study <%= @h_studies[hit.study.id] + 1 %></td>
+<td><%= "SPalmH:" + hit.id.to_s %></td>
+<td><%= raw (hit.sites.size > 0) ? hit.sites.map{|e| "SPalmS:#{e.id}: Cys<sup>" + e.pos.to_s + "</sup>"}.join(',') : "<span style='font-style:italic'>None</span>" %></td>
+</tr>
+<%# end %>
+</table>
+-->
+

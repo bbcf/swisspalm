@@ -1,0 +1,221 @@
+<% @include_js = javascript_include_tag 'd3.v3.min.js' %>
+<% @include_js += javascript_include_tag 'CodeFlower.js' %>
+<div id='graph'></div>
+
+<%= params[:color_scheme] %>
+
+<div id='legend'>
+<table id='color_table'></table>
+</div>
+    <script>
+
+var h_organisms = <%= raw @h_organisms.to_json %>;
+var list_organism_ids = <%= raw @h_organisms.keys.to_json %>; 
+var graph = <%= raw @graph_data.to_json %>;
+
+var width = 1500,
+    height = 1000;
+
+var color = d3.scale.category20();
+
+var svg = d3.select("#graph").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+
+ var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+	 
+
+for (var i = 0; i< list_organism_ids.length; i++){
+$('#color_table').append("<tr><td class='first_col' style='background-color:" + color(list_organism_ids[i]) + "'></td><td class='second_col'>" +  h_organisms[list_organism_ids[i]].name + "</td></tr>");
+}
+
+var force = d3.layout.force()
+    .nodes(graph.nodes)
+    .links(graph.links)
+    .charge(-80)
+    .friction(.8)
+    .linkDistance(100)
+    .size([width, height])
+    .on("tick",  function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+
+
+node.call(force.drag);
+
+
+//setTimeout(function() {
+
+            var n = 7;
+            force.start();
+<% if params[:static]  %>
+            for (var i = n * n; i > 0; --i) force.tick();
+            force.stop();
+<% end %>
+
+/*  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+*/
+/*  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+      .call(force.drag);
+*/
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+//var path = svg.append("svg:g").selectAll("path").data(force.links()).enter().append("svg:path").attr("class", "link").attr("marker-end", "url(#end)");
+
+
+/*function tick() {
+        path.attr("d", function(d) {
+            var dx = d.target.x - d.source.x, dy = d.target.y - d.source.y, dr = Math.sqrt(dx * dx + dy * dy);
+            return "M" + d.source.x + "," + d.source.y + "A" + dr + "," + dr + " 0 0,1 " + d.target.x + "," + d.target.y;
+        });
+        node.attr("transform", function(d) {
+            return "translate(" + d.x + "," + d.y + ")";
+        });
+}*/
+   force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+
+
+
+//},10);
+
+/*
+function name(d) { return d.name; }
+function group(d) { return d.group; }
+
+var color = d3.scale.category10();
+function colorByGroup(d) { return color(group(d)); }
+
+var width = 960,
+    height = 700;
+
+var svg = d3.select('#viz')
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height);
+
+var node, link;
+
+var voronoi = d3.geom.voronoi()
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; })
+    .clipExtent([[-5, -5], [width+5, height+5]]);
+
+function recenterVoronoi(nodes) {
+    var shapes = [];
+    voronoi(nodes).forEach(function(d) {
+        if ( !d.length ) return;
+        var n = [];
+        d.forEach(function(c){
+            n.push([ c[0] - d.point.x, c[1] - d.point.y ]);
+        });
+        n.point = d.point;
+        shapes.push(n);
+    });
+    return shapes;
+}
+
+var force = d3.layout.force()
+    .charge(-200)
+    .friction(0.3)
+    .linkDistance(5)
+    .size([width, height]);
+
+force.on('tick', function() {
+    node.attr('transform', function(d) { return 'translate('+d.x+','+d.y+')'; })
+        .attr('clip-path', function(d) { return 'url(#clip-'+d.index+')'; });
+
+    link.attr('x1', function(d) { return d.source.x; })
+        .attr('y1', function(d) { return d.source.y; })
+        .attr('x2', function(d) { return d.target.x; })
+        .attr('y2', function(d) { return d.target.y; });
+
+    var clip = svg.selectAll('.clip')
+        .data( recenterVoronoi(node.data()), function(d) { return d.point.index; } );
+
+    clip.enter().append('clipPath')
+        .attr('id', function(d) { return 'clip-'+d.point.index; })
+        .attr('class', 'clip');
+    clip.exit().remove()
+
+    clip.selectAll('path').remove();
+    clip.append('path')
+        .attr('d', function(d) { return 'M'+d.join(',')+'Z'; });
+});
+
+
+var data = <%= raw @graph_data.to_json %>
+
+    data.nodes.forEach(function(d, i) {
+        d.id = i;
+    });
+
+    link = svg.selectAll('.link')
+        .data( data.links )
+      .enter().append('line')
+        .attr('class', 'link')
+        .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+    node = svg.selectAll('.node')
+        .data( data.nodes )
+      .enter().append('g')
+        .attr('title', name)
+        .attr('class', 'node')
+        .call( force.drag );
+
+    node.append('circle')
+        .attr('r', 10)
+        .attr('fill', colorByGroup)
+        .attr('fill-opacity', 0.5);
+
+    node.append('circle')
+        .attr('r', 3)
+        .attr('stroke', 'black');
+
+    force
+        .nodes( data.nodes )
+        .links( data.links )
+        .start();
+
+*/
+    </script>

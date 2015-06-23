@@ -1,0 +1,21 @@
+<h1>Listing annots</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @annots.each do |annot| %>
+  <tr>
+    <td><%= link_to 'Show', annot %></td>
+    <td><%= link_to 'Edit', edit_annot_path(annot) %></td>
+    <td><%= link_to 'Destroy', annot, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Annot', new_annot_path %>

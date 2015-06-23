@@ -1,0 +1,17 @@
+<%= form_for(@orthodb_attr) do |f| %>
+  <% if @orthodb_attr.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@orthodb_attr.errors.count, "error") %> prohibited this orthodb_attr from being saved:</h2>
+
+      <ul>
+      <% @orthodb_attr.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<h1>Listing table_header_captions</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Table ID</th>
+    <th>Column name</th>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @table_header_captions.each do |table_header_caption| %>
+  <tr>
+    <td><%= table_header_caption.id %></td>
+    <td><%= table_header_caption.table_id %></td>
+    <td><%= table_header_caption.column_name %></td>
+    <td><%= table_header_caption.description %></td>
+    <td><%= link_to 'Show', table_header_caption %></td>
+    <td><%= link_to 'Edit', edit_table_header_caption_path(table_header_caption) %></td>
+    <td><%= link_to 'Destroy', table_header_caption, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Table header caption', new_table_header_caption_path %>

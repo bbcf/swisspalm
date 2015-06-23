@@ -1,0 +1,2 @@
+module CysteinesHelper
+end

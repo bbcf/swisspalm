@@ -1,0 +1,17 @@
+<%= form_for(@homologue) do |f| %>
+  <% if @homologue.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@homologue.errors.count, "error") %> prohibited this homologue from being saved:</h2>
+
+      <ul>
+      <% @homologue.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

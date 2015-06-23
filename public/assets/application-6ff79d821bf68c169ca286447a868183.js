@@ -1,0 +1,1 @@
+function gid(e){return document.getElementById(e)}var browserName=navigator.appName;

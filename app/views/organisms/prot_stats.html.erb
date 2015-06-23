@@ -1,0 +1,62 @@
+<h1>Stats on proteins by organism</h1>
+
+<table id='list_organisms' class='std_table'>
+<thead>
+  <tr>
+<% if admin? %>
+    <th>ID</th>
+<% end %>
+    <th>Name</th>
+<th>Total # of proteins</th>
+<th># of proteins with at least 1 hit</th>
+<th># of proteins with at least 1 annotated hit</th>
+<th># of proteins with at least 1 annotated hit but in none of the palmitomes</th>
+<th># of proteins with at least 1 hit across all palmitomes</th>
+<th># of proteins with at least 1 predicted palmitoylation</th>
+<th># of proteins (main isoform) with at least 1 predicted palmitoylation</th>
+<th># of proteins (main isoform) with at least 1 predicted palmitoylation and in adequation with annotation<sup>*</sup></th>
+<th># of proteins (main isoform) with at least 1 disulfide bond</th>
+  </tr>
+</thead>
+<tbody>
+<% @organisms.each do |o| %>
+  <tr>
+<% if admin? %>
+<td><%= o.id %></td>
+<% end %>
+<td><%= o.name %></td>
+<td><%= Protein.count(:conditions => {:organism_id => o.id}) %></td>
+<td><%= Protein.count(:conditions => {:organism_id => o.id, :has_hits_public => true}) %></td>
+<td><%= @h_annotated[o.id].keys.size %></td>
+<td><%= @h_annotated[o.id].keys.select{|pid| !@h_palmitome[o.id][pid]}.size %></td>
+<td><%= Protein.count(:conditions => {:organism_id => o.id, :has_hits_ortho_public => true}) %></td>
+<td><%= Protein.count(:conditions => {:organism_id => o.id, :has_hc_pred => true}) %></td>
+<td><%= o.nber_proteins_with_predicted_cys_main_isoform %></td>
+<td><%= o.nber_prot_with_predicted_cys_main_isoform_without_false_pos %></td>
+<td><%= o.nber_proteins_with_disulfide %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<sup>*</sup> Not participating in disulfide bonds, not in extracellular/lumenal topologies (membrane proteins) and not in proteins annotated to be only in extracellular or lumenal subcellular locations.
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_organisms').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+        "iDisplayLength": <%= @organisms.size %>
+        })
+});
+
+
+//]]>
+</script>

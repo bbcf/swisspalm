@@ -1,0 +1,83 @@
+
+<%= @sites.size %> sites found.
+<br/>
+<table id ='list_sites'>
+<thead>
+  <tr>
+    <th>Hit ID</th>
+    <th>Organism</th>
+    <th>Protein</th>
+    <th>Isoform</th>
+    <th>Study</th>
+    <th>Study organism/cell_type/subcell</th>
+    <th>Study techniques</th>
+    <th>Site ID</th>
+<!--    <th>Site organism</th>
+    <th>Cell type</th>
+    <th>Subcellular fraction</th>-->
+    <th>Position (<sup>*</sup>uncertain)</th>
+    <th>PATs</th>
+    <th>Site techniques</th>
+    <th>Total protein hits</th>
+    <th>Protein hits in palmitoyl-proteome studies</th>
+    <th>Added by</th>
+    <th>Validated by</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+<% @sites.each do |site| %>
+  <tr>
+<% hit = site.hit %>
+<% protein = hit.protein %>
+<% study = hit.study %>
+<td>SPalmH:<%= hit.id %></td>
+<td><%= (protein.organism) ? protein.organism.name : 'NA' %></td>
+<td><%= link_to protein.up_id, protein_path(protein) %></td>
+<td><%= (hit.isoform_id) ? hit.isoform.isoform : '-'  %></td>
+<td><%= study.authors + " (#{study.year})" %></td>
+<td><%= (study.organism) ? study.organism.name : 'NA' %>
+<br/>
+<%= (study.cell_type) ? study.cell_type.name : 'NA' %>
+<br/>
+<%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %>
+</td>
+<td><%= raw study.techniques.map{|t| t.name}.join('<br/>') %></td>
+<td>SPalmS:<%= site.id %></td>
+<!--<td><%= (site.organism) ? site.organism.name : 'NA' %></td>
+<td><%= (site.cell_type) ? site.cell_type.name : 'NA' %></td>
+<td><%= (site.subcellular_fraction) ? site.subcellular_fraction.name : 'NA' %></td>-->
+<td><%= site.pos %><%= raw (site.uncertain_pos == true) ? '<sup>*</sup>' : '' %></td>
+<td><%= raw site.reactions.map{|r| link_to r.protein.up_id, protein_path(r.protein) }.join(", ") %></td>
+<td><%= raw site.techniques.map{|t| t.name}.join('<br/>') %></td>
+<td><%= protein.hits.size %></td>
+<td><%= protein.hits.select{|h| h.study.large_scale == true}.size %> <%# link_to 'See details', hits_path() %></td>
+    <td><%= (site.curator_id) ? User.find(site.curator_id).initials : 'Auto' %></td>
+    <td><%= (site.validator_id) ? User.find(site.validator_id).initials : '-' %></td>
+    <!--    <td><%= link_to 'Edit', edit_site_path(protein) %></td>-->
+    <td><% if admin? %><%= link_to 'Destroy', site, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_sites').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @sites.size %>
+        })
+});
+
+
+//]]>
+</script>
+

@@ -1,0 +1,38 @@
+<li id='list_studies'>
+<h2><span class='show_button'>+</span>Studies</h2>
+<div class='show_content hidden'>
+<% if @studies.size > 0 %>
+
+<table class='classic'>
+<head>
+<th>Study #</th>
+<th>Reference #</th>
+<th>Organism</th>
+<th>Cell type</th>
+<th>Subcellular location</th>
+<th>Technique(s)</th>
+<th>Palmitome study?</th>
+<%= raw "<th>Internal study?</th>" if lab_user? or admin? %>
+</thead>
+<tbody>
+<% @studies.each do |study| %>
+<%# @studies_by_article[i].each do |study| %>
+<tr>
+<td class='nowrap'>Study <%= @h_studies[study.id] + 1 %></td>
+<td class='nowrap'>
+<%= (@h_articles[study.pmid]) ? link_to(("Ref. " + (@h_articles[study.pmid] + 1).to_s), 'http://www.ncbi.nlm.nih.gov/pubmed/' + study.pmid.to_s) : (study.name) %></td>
+<td><%= (study.organism) ? study.organism.name : 'NA' %></td>
+<td><%= (study.cell_type) ? study.cell_type.name : 'NA' %></td>
+<td><%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %></td>
+<td><%= (study.techniques.size > 0) ? study.techniques.map{|e| e.name}.join(', ') : 'NA' %></td>
+<td><%= (study.large_scale == false) ? 'No'  : 'Yes' %></td>
+<%= raw "<td>" + ((study.hidden == false) ? 'No' : 'Yes') + "</td>" if lab_user? or admin? %>
+</tr>
+<% end %>
+</tbody>
+</table>
+<% else %>
+<span style='font-style:italic'>No reference available.</span>
+<% end %>
+</div>
+</li>

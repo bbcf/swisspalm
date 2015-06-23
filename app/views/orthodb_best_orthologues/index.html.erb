@@ -1,0 +1,21 @@
+<h1>Listing orthodb_best_orthologues</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orthodb_best_orthologues.each do |orthodb_best_orthologue| %>
+  <tr>
+    <td><%= link_to 'Show', orthodb_best_orthologue %></td>
+    <td><%= link_to 'Edit', edit_orthodb_best_orthologue_path(orthodb_best_orthologue) %></td>
+    <td><%= link_to 'Destroy', orthodb_best_orthologue, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Orthodb best orthologue', new_orthodb_best_orthologue_path %>

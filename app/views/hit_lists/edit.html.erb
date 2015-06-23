@@ -1,0 +1,8 @@
+<% study = @hit_list.study %>
+
+<h1>Editing Hit list <%= study.authors %>, <%= study.year %> - <%= (@hit_list.confidence_level) ? @hit_list.confidence_level.tag : @hit_list.label %></h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @hit_list %> |
+<%= link_to 'Back', hit_lists_path %>

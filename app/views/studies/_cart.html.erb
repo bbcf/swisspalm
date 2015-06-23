@@ -1,0 +1,26 @@
+<%= raw  session[:studies].map{ |s_id| 
+ study = Study.find(s_id); 
+  format_study_name(study) + "<span class='important'><sup>" + link_to_function('x', "del_study('" + del_from_session_study_path(s_id) + "')") + "</sup></span>"
+ }.join(', ')  %> 
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function del_study(url){
+  $.ajax({
+                url: url,
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){
+                   $('#filter_list_studies').html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+//]]>
+</script>

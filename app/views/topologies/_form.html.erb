@@ -1,0 +1,17 @@
+<%= form_for(@topology) do |f| %>
+  <% if @topology.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@topology.errors.count, "error") %> prohibited this topology from being saved:</h2>
+
+      <ul>
+      <% @topology.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

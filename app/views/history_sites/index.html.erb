@@ -1,0 +1,21 @@
+<h1>Listing history_sites</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @history_sites.each do |history_site| %>
+  <tr>
+    <td><%= link_to 'Show', history_site %></td>
+    <td><%= link_to 'Edit', edit_history_site_path(history_site) %></td>
+    <td><%= link_to 'Destroy', history_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New History site', new_history_site_path %>

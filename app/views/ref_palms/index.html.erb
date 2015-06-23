@@ -1,0 +1,21 @@
+<h1>Listing ref_palms</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @ref_palms.each do |ref_palm| %>
+  <tr>
+    <td><%= link_to 'Show', ref_palm %></td>
+    <td><%= link_to 'Edit', edit_ref_palm_path(ref_palm) %></td>
+    <td><%= link_to 'Destroy', ref_palm, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Ref palm', new_ref_palm_path %>

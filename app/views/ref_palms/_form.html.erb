@@ -1,0 +1,17 @@
+<%= form_for(@ref_palm) do |f| %>
+  <% if @ref_palm.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ref_palm.errors.count, "error") %> prohibited this ref_palm from being saved:</h2>
+
+      <ul>
+      <% @ref_palm.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

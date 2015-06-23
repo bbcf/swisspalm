@@ -1,0 +1,17 @@
+<%= form_for(@protein_group_value) do |f| %>
+  <% if @protein_group_value.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@protein_group_value.errors.count, "error") %> prohibited this protein_group_value from being saved:</h2>
+
+      <ul>
+      <% @protein_group_value.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

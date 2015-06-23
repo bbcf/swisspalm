@@ -1,0 +1,21 @@
+<h1>Listing pat_isoforms</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @pat_isoforms.each do |pat_isoform| %>
+  <tr>
+    <td><%= link_to 'Show', pat_isoform %></td>
+    <td><%= link_to 'Edit', edit_pat_isoform_path(pat_isoform) %></td>
+    <td><%= link_to 'Destroy', pat_isoform, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Pat isoform', new_pat_isoform_path %>

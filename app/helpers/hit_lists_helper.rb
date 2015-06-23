@@ -1,0 +1,2 @@
+module HitListsHelper
+end

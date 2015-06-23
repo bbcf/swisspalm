@@ -1,0 +1,45 @@
+<p id="notice"><%= notice %></p>
+
+<% study = @hit_list.study %>
+
+<h1>Hit list <%= format_study_name(study) %> - <%= (@hit_list.confidence_level) ? @hit_list.confidence_level.tag : @hit_list.label %></h1>
+<% hits = @hit_list.hits %>
+
+<%= hits.size %> hits, <%= hits.map{|e| e.protein_id}.uniq.size %> proteins.
+
+<table id='list_hits' class='std_table'>
+<thead>
+  <tr>
+<th><%= raw @data[0].join("</th><th>") %></th>
+    </tr>    
+</thead>
+<tbody>
+<tr>
+<%= raw (1 .. @data.size-1).to_a.map{|i| 
+#     @data[i][1] = link_to @data[i][1],  protein_path(hit.protein.id);	  
+     "<td>" + @data[i].join("</td><td>") + "</td>"}.join("</tr><tr>") %>
+</tr>
+</tbody>
+</table>
+
+<%= link_to 'Edit', edit_hit_list_path(@hit_list) %> |
+<%= link_to 'Back', hit_lists_path %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": 2000
+        })
+});
+
+
+//]]>
+</script>
+

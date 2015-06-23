@@ -1,0 +1,147 @@
+<%= form_for(@site) do |f| %>
+  <% if @site.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@site.errors.count, "error") %> prohibited this site from being saved:</h2>
+
+      <ul>
+      <% @site.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr><td>
+Study
+</td><td>
+<%= f.autocomplete_field :study_text, autocomplete_studies_path, :size => 125, :onchange => 'setTimeout(function(){upd_fields()}, 1000);' %>
+<%= f.hidden_field :study_id %>
+</td>
+</tr>
+<!-- if there are hit lists give choice -->
+<!-- if a hit list give protein_id and isoform_id to create new hit -->
+<!--<tr>
+<td>Hit list [optional]</td>
+<% l = [] %> 
+<td>Existing <%= select_tag :hit_list_id, options_for_select(l) %> or new <%= text_field_tag :hit_list_text %></td>
+</tr>-->
+<tr>
+<td>Protein (UniProt AC)</td>
+<td>
+<%= f.autocomplete_field  :protein_text, autocomplete2_proteins_path, :onchange => 'setTimeout(function(){upd_fields()},1000);' %>
+<%= f.hidden_field :protein_id %>
+</td></tr>
+<tr>
+<td>Isoform (UniProt AC) (where position of Cys is unchanged and specific palmitoylation is shown) [optional] e.g. 1-4,7</td>
+<td>
+<%= f.text_field  :isoform_text %>
+<%# hidden_field_tag :isoform_id %>
+</td></tr>
+<tr><td>Position</td><td>
+<%= f.text_field :pos %>
+<table><tr><td><%= f.check_box :uncertain_pos %></td><td> Uncertain position</td></tr></table>
+
+</td></tr>
+<tr><td>Transferase(s) (comma-separated list of UniProt AC)</td><td>
+<%= f.text_field :transferase_text %>
+</td></tr>
+<tr><td>Esterase(s) (comma-separated list of UniProt AC)</td><td>
+<%= f.text_field :esterase_text %>
+</td></tr>
+<!--<tr>
+<% l = Organism.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', '']) %>
+<td>Organism</td><td><%= f.select :organism_id, l %></td>
+</tr>
+<tr>
+<% l = CellType.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', '']) %>
+<td>Cell type</td><td><%= f.select :cell_type_id, l %></td>
+</tr>
+<tr>
+<% l = SubcellularFraction.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', nil]) %>
+<td>Subcellular fraction</td><td><%= f.select :subcellular_fraction_id, l %></td>
+</tr>-->
+<!--<tr><td>
+Hit characterization technique(s)
+</td><td>
+<table>
+<% Technique.all.select{|t| t.site_characterization == false}.sort{|a,b| a.name <=> b.name}.each do |t| %>
+<tr><td><%= check_box_tag "hit[technique_ids][]", t.id, (@site.hit and @site.hit.techniques.include?(t)) %></td><td><%= raw t.name %></td></tr>
+<% end %>
+</table>
+</td></tr>-->
+<tr><td>
+Site characterization technique(s)
+</td><td>
+<table>
+<% Technique.all.select{|t| t.site_characterization }.sort{|a,b| a.name <=> b.name}.each do |t| %>
+<tr><td><%= check_box_tag "site[technique_ids][]", t.id, @site.techniques.include?(t) %></td><td><%= raw t.name %></td></tr> 
+<% end %>
+</table>
+</td></tr>
+<!--<tr><td>Uncertain position</td><td>
+<%# f.check_box :uncertain_pos %>
+</td></tr>
+-->
+<!--<tr><td>Required modification</td><td>
+<%= f.check_box :required_mod %>
+</td></tr>-->
+</table>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+ <% end %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function ClearOptions(o){
+	o.options.length = 0;
+}
+
+
+function upd_fields(){
+
+$.ajax({
+                url: "<%= upd_form_sites_path %>",
+                type: "get",
+                dataType: "json",
+                data: {"study_text" : $("#site_study_text").val(), "up_ac" : $("#site_protein_text").val()},
+                success: function(h){
+                 //    $("#div_protein_list").html(returnData);
+		//alert(h.study_id)
+//	         var l = ['protein_id', 'study_id', 'organism_id', 'subcellular_fraction_id', 'cell_type_id'];
+		 var l = ['protein_id', 'study_id'];
+		 for(var i=0; i<l.length; i++){
+                    var o = document.getElementById("site_" + l[i]);
+		    o.value = h[l[i]];
+                 }
+// no more hit_list in this formular
+/*	         var o = document.getElementById('hit_list_id');
+ 		 ClearOptions(o);
+		 h.hit_lists.unshift(['', 'Default']);
+	         for(var i=0; i< h.hit_lists.length ;i++){
+			var opt = document.createElement('option');
+    			opt.value = h.hit_lists[i][0];	
+       			opt.innerHTML = h.hit_lists[i][1];
+    			o.appendChild(opt);
+		  }
+*/	
+
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+upd_fields();
+
+//]]>
+</script>
+

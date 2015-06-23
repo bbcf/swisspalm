@@ -1,0 +1,57 @@
+<%= @go_term_enrichments.size %> GO terms.
+
+<table id='go_terms'>
+<thead>
+<tr>
+<th>GO term ID</th>
+<th>GO term name</th>
+<th>Total number of proteins</th>
+<th>Number of proteins with palmitoylation evidence</th>
+<th>Ratio</th>
+<th>EASE score</th>
+</tr>
+</thead>
+<tbody>
+<% @go_term_enrichments.each do  |gte| %>
+<tr>
+<td><%= gte.go_term.acc %></td>
+<td><%= gte.go_term.name %></td>
+<td><%= link_to gte.nber_prot, proteins_path({:term => "GO:#{gte.go_term.name}", :search_db => "all", :organism_id => @organism.id}) %></td>
+<td><%= link_to gte.nber_palm, proteins_path({:term => "GO:#{gte.go_term.name}", :search_db => "palm", :organism_id => @organism.id}) %></td>
+<td><%= gte.enrichment %></td>
+<td><%= gte.pval %></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery.fn.dataTableExt.oSort['allnumeric-asc']  = function(a,b) {
+          var x = parseFloat(a);
+          var y = parseFloat(b);
+          return ((x < y) ? -1 : ((x > y) ?  1 : 0));
+        };
+ 
+jQuery.fn.dataTableExt.oSort['allnumeric-desc']  = function(a,b) {
+          var x = parseFloat(a);
+          var y = parseFloat(b);
+          return ((x < y) ? 1 : ((x > y) ?  -1 : 0));
+        };
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#go_terms').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+	 "aoColumnDefs": [{ "sType": "allnumeric", "aTargets": [ 5 ] } ],
+	"aaSorting": [[ 5, "asc" ]],
+        "iDisplayLength": 200
+        })
+});
+
+//]]>
+</script>

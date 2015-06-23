@@ -1,0 +1,17 @@
+<%= form_for(@phosphosite_feature) do |f| %>
+  <% if @phosphosite_feature.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@phosphosite_feature.errors.count, "error") %> prohibited this phosphosite_feature from being saved:</h2>
+
+      <ul>
+      <% @phosphosite_feature.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

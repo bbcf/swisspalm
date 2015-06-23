@@ -1,0 +1,17 @@
+<%= form_for(@isoform_diff_prediction) do |f| %>
+  <% if @isoform_diff_prediction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@isoform_diff_prediction.errors.count, "error") %> prohibited this isoform_diff_prediction from being saved:</h2>
+
+      <ul>
+      <% @isoform_diff_prediction.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

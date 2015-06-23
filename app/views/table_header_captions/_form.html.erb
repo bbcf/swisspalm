@@ -1,0 +1,19 @@
+<%= form_for(@table_header_caption) do |f| %>
+  <% if @table_header_caption.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@table_header_caption.errors.count, "error") %> prohibited this table_header_caption from being saved:</h2>
+
+      <ul>
+      <% @table_header_caption.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<%= f.text_area :description %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

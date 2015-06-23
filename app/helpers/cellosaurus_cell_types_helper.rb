@@ -1,0 +1,2 @@
+module CellosaurusCellTypesHelper
+end

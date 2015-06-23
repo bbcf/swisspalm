@@ -1,0 +1,49 @@
+<li id='list_orthologues'>
+<h2><span class='show_button'>+</span>Orthologues</h2>
+<div class='show_content hidden'>
+<table class='classic multiline_header'>
+<thead>
+<tr>
+<th>UniProt AC</th>
+<th></th>
+<th>UniProt ID</th>
+<!-- <th>UniProt status</th> -->
+<th>Orthology source</th>
+    <th>Organism</th>
+    <th>Gene names</th>
+    <th>Description</th>
+    <th>Isoforms</th>
+    <th># palmitome studies</th>
+    <th># targeted studies</th>
+    <th># of distinct techniques</th>
+    <th># of known sites</th>
+    <th>Predicted</th>
+<tr>
+</thead><tbody>
+<% @h_orthologues.each_key do |orthologue_id| %>
+<% p = @h_orthologue_proteins[orthologue_id] %>
+<% hits = p.hits %>
+<% studies = @h_studies_by_protein_id[p.id] %> 
+<tr>
+<td>
+<%= format_up_ac(p) %> 
+</td>
+<td class='center'><%= uniprot_status(p) %></td>
+<td><%= p.up_id %></td>
+<!--<td class='center'><%= uniprot_status(p) %></td>-->
+<td><%= raw @h_orthologues[orthologue_id].ortho_sources.map{|e| e.name}.join(", ") %></td>
+<td><%= o = p.organism; (o) ? o.common_name || o.shortname || o.name : 'NA' %></td>
+<td><%= p.ref_proteins.select{|e| e.source_type and e.source_type.name == 'gene_name'}.map{|e| e.value}.join(", ") %></td>
+<td><%= p.description %></td>
+<td><%= p.isoforms.size %></td>
+<td><%= studies.select{|s| s.large_scale}.uniq.size %>/<%= @h_nber_studies_by_organism[p.organism_id] %></td>
+<td><%= studies.select{|s| s.large_scale == false}.uniq.size %></td>
+<td><%= studies.select{|s| s.large_scale}.map{|s| s.techniques}.flatten.uniq.size %></td>
+<td><%= hits.map{|h| h.sites}.flatten.map{|s| {:pos => s.pos, :isoform => s.hit.isoform}}.uniq.size %></td>
+<td><%= (p.has_hc_pred) ? 'Yes' : 'No' %></td>
+</tr>
+<% end %> 
+</tbody>
+</table>
+</div>
+</li>

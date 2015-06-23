@@ -1,0 +1,17 @@
+<%= form_for(@oma_pair) do |f| %>
+  <% if @oma_pair.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@oma_pair.errors.count, "error") %> prohibited this oma_pair from being saved:</h2>
+
+      <ul>
+      <% @oma_pair.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

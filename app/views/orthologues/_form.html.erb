@@ -1,0 +1,17 @@
+<%= form_for(@orthologue) do |f| %>
+  <% if @orthologue.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@orthologue.errors.count, "error") %> prohibited this orthologue from being saved:</h2>
+
+      <ul>
+      <% @orthologue.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

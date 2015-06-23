@@ -1,0 +1,21 @@
+<h1>Listing orthodb_attrs</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @orthodb_attrs.each do |orthodb_attr| %>
+  <tr>
+    <td><%= link_to 'Show', orthodb_attr %></td>
+    <td><%= link_to 'Edit', edit_orthodb_attr_path(orthodb_attr) %></td>
+    <td><%= link_to 'Destroy', orthodb_attr, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Orthodb attr', new_orthodb_attr_path %>

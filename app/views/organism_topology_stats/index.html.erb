@@ -1,0 +1,21 @@
+<h1>Listing organism_topology_stats</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @organism_topology_stats.each do |organism_topology_stat| %>
+  <tr>
+    <td><%= link_to 'Show', organism_topology_stat %></td>
+    <td><%= link_to 'Edit', edit_organism_topology_stat_path(organism_topology_stat) %></td>
+    <td><%= link_to 'Destroy', organism_topology_stat, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Organism topology stat', new_organism_topology_stat_path %>

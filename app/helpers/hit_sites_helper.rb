@@ -1,0 +1,2 @@
+module HitSitesHelper
+end

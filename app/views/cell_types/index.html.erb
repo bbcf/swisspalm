@@ -1,0 +1,59 @@
+<h1>Listing cell types</h1>
+
+<%= link_to 'New Cell type', new_cell_type_path %>
+
+<table id = 'list_cell_types'>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Cellosaurus ID</th>
+    <th>Cellosaurus AC</th>	
+    <th>Total # of hits / # of related proteins</th>
+    <th>Total # of sites / # of related proteins</th>    
+<% if admin? %>
+    <th></th>
+    <th></th>
+<% end %>
+<% if superadmin? %>
+    <th></th>
+<% end %>
+  </tr>
+</thead><tbody>
+<% @cell_types.each do |cell_type| %>
+  <tr>
+    <td><%= cell_type.id %></td>
+    <td><%= cell_type.name %></td>
+    <td><%= (cell_type.cellosaurus_cell_type) ? cell_type.cellosaurus_cell_type.name : 'NA' %></td>
+    <td><%= (cell_type.cellosaurus_cell_type) ? cell_type.cellosaurus_cell_type.ac : 'NA' %></td>
+    <td><%= hits = cell_type.studies.map{|s| s.hits}.flatten; hits.size %> / <%= hits.map{|h| h.protein_id}.uniq.size %></td>
+    <td><%= sites = hits.map{|h| h.sites}.flatten ; sites.size %> / <%= sites.map{|s| s.hit.protein_id}.uniq.size %></td>
+<% if admin? %>
+    <td><%= link_to 'Show', cell_type %></td>
+    <td><%= link_to 'Edit', edit_cell_type_path(cell_type) %></td>
+<% end %>
+    <td><% if superadmin? %><%= link_to 'Destroy', cell_type, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_cell_types').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @cell_types.size %>
+        })
+});
+
+
+//]]>
+</script>

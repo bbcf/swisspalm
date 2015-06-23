@@ -1,0 +1,153 @@
+body { background-color: #fff; color: #333; }
+
+body, p, ol, ul, td {
+  font-family: verdana, arial, helvetica, sans-serif;
+  font-size:   13px;
+  line-height: 18px;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+h1, h2, h3 {font-weight:normal}
+h2{padding-left:1em;}
+h3{padding-left:1em;}
+
+//ul {list-style-type: none;padding: 0px;margin: 2px;}
+//li { padding-left:5px}
+
+a.tool {text-decoration:none;}
+a.tool:visited{text-decoration:none;}
+a.tool:hover{text-decoration:underline}
+
+a { color: #0000AA; text-decoration:none}
+a:visited { color: #3300AA; }
+a:hover { text-decoration:underline;color: #000; }
+
+a.selected {text-decoration:underline}
+a.selected:visited {text-decoration:underline}
+a.selected:hover {text-decoration:underline}
+
+
+h2.preprocessing{color:#00AA00}
+h2.processing{color:#0000CC}
+h2.visualization{color:#CC0000}
+h2.data-management{color:#009999}
+h2.data-analysis{color:#990099}
+h2.tool-libraries{color:#666666}
+
+a.websites{color:#000000}
+a.preprocessing{color:#00AA00}
+a.processing{color:#0000CC}
+a.visualization{color:#CC0000}
+a.data-management{color:#009999}
+a.data-analysis{color:#990099}
+a.tool-libraries{color:#666666}
+
+
+
+
+ul.websites{margin-top: 1em; padding-top:.7em; padding-bottom:.7em; border:1px solid #000000}
+ul.preprocessing {margin-top: 1em; padding-top:.7em; padding-bottom:.7em; border:1px solid #00AA00}
+ul.processing {margin-top: 1em;  padding-top:.7em; padding-bottom:.7em;border:1px solid #0000CC}
+ul.visualization {margin-top: 1em;  padding-top:.7em; padding-bottom:.7em; border:1px solid #CC0000}
+ul.data-management {margin-top: 1em;  padding-top:.7em; padding-bottom:.7em;border:1px solid #009999}
+ul.data-analysis {margin-top: 1em;  padding-top:.7em; padding-bottom:.7em; border:1px solid #990099}
+ul.tool-libraries{margin-top: 1em;  padding-top:.7em; padding-bottom:.7em; border:1px solid #666666}
+
+
+ul.preprocessing li {color:#00AA00}
+ul.processing li {color:#0000CC}
+ul.visualization li {color:#CC0000}
+ul.data-management li {color:#009999}
+ul.data-analysis li {color:#990099}
+ul.tool-libraries li {color:#666666}
+
+
+a img {
+border:white 0px solid;
+}
+
+a img:hover {
+border:white 0px solid;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+#tool_list {border-collapse:collapse;border:1px solid black;}
+#tool_list th {border:1px solid grey;text-align:left; padding:1em}
+#tool_list th.first {width:8em}
+#tool_list th.second {width:60em}
+
+#tool_list tr {border:1px solid black;}
+#tool_list tr td {border:1px solid grey; padding:.5em}
+
+#frame {border:0px; border-collapse:collapse; width:100%}
+#left_panel {width:10em; vertical-align:top; padding-top: 0px; }
+#central_panel {vertical-align:top}
+#header{cursor:pointer; background-color:#FFDD99; padding:5px; height: 4em;}
+#references{float:left}
+a.bbcf_img div.bbcf_img_container {
+border:white 1px solid;
+padding:2px;
+}
+
+a.bbcf_img div.bbcf_img_container:hover {
+border:#FFCCAA 1px solid;
+padding:2px;
+}
+
+
+#footer {padding-top:10px; color:grey}
+#footer table {width:100%}
+#footer table tr td {vertical-align:top}
+/*h2{color:#DD8833}*/
+
+#main-content {padding-left:2em;}
+
+span.beta {font-size:16px}
+
+#actions{font-size:.9em; position:fixed; z-index:1000; bottom:0px;left:0px; width:100%;padding:.5em;background-color:#EFEFEF}
+#list_patterns tr td.center {text-align:center}
+
+table.features {border-collapse:collapse}
+table.features tr th {border-right:1px solid grey; border-left:1px solid grey; padding:0.2em}
+table.features tr td {border-right:1px solid grey;border-left:1px solid grey;padding:0.2em}
+

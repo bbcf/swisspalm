@@ -1,0 +1,17 @@
+<%= form_for(@go_relation) do |f| %>
+  <% if @go_relation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@go_relation.errors.count, "error") %> prohibited this go_relation from being saved:</h2>
+
+      <ul>
+      <% @go_relation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

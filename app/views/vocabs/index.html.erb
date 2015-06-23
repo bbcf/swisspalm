@@ -1,0 +1,30 @@
+<h1>Listing vocabs</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Data Type</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @vocabs.each do |vocab| %>
+  <tr>
+    <td><%= vocab.id %></td>
+    <td><%= (vocab.data_type) ? vocab.data_type.name : 'NA' %></td>
+    <td><%= vocab.name %></td>
+    <td><%= vocab.description %></td>
+
+    <td><%= link_to 'Show', vocab %></td>
+    <td><%= link_to 'Edit', edit_vocab_path(vocab) %></td>
+    <td><%= link_to 'Destroy', vocab, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Vocab', new_vocab_path %>

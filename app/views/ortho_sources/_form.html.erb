@@ -1,0 +1,17 @@
+<%= form_for(@ortho_source) do |f| %>
+  <% if @ortho_source.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@ortho_source.errors.count, "error") %> prohibited this ortho_source from being saved:</h2>
+
+      <ul>
+      <% @ortho_source.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

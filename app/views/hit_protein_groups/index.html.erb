@@ -1,0 +1,21 @@
+<h1>Listing hit_protein_groups</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hit_protein_groups.each do |hit_protein_group| %>
+  <tr>
+    <td><%= link_to 'Show', hit_protein_group %></td>
+    <td><%= link_to 'Edit', edit_hit_protein_group_path(hit_protein_group) %></td>
+    <td><%= link_to 'Destroy', hit_protein_group, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hit protein group', new_hit_protein_group_path %>

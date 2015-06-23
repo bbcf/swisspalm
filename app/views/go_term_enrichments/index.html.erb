@@ -1,0 +1,21 @@
+<h1>Listing go_term_enrichments</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @go_term_enrichments.each do |go_term_enrichment| %>
+  <tr>
+    <td><%= link_to 'Show', go_term_enrichment %></td>
+    <td><%= link_to 'Edit', edit_go_term_enrichment_path(go_term_enrichment) %></td>
+    <td><%= link_to 'Destroy', go_term_enrichment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Go term enrichment', new_go_term_enrichment_path %>

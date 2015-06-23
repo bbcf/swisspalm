@@ -1,0 +1,19 @@
+<%# @h_transmembrane_prots.keys.size %>
+<%= @seq_list.size %> sequences taken into account.
+
+<table><tr><th></th><th>
+<%= raw (0 .. @window*2).to_a.map{|e| e+1}.join("</th><th>") %>
+</th></tr>
+<% @aa.each do |a| %>
+<tr>
+<td><%= a %></td>
+<% if @l[a] %>
+ <% @l[a].each_index do |i| %>
+ <td>
+ <%= @l[a][i] || 0 %>
+ </td>
+<% end %>
+<% end %>
+</tr>
+<% end %>
+</table>

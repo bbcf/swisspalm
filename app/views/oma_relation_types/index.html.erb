@@ -1,0 +1,21 @@
+<h1>Listing oma_relation_types</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @oma_relation_types.each do |oma_relation_type| %>
+  <tr>
+    <td><%= link_to 'Show', oma_relation_type %></td>
+    <td><%= link_to 'Edit', edit_oma_relation_type_path(oma_relation_type) %></td>
+    <td><%= link_to 'Destroy', oma_relation_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Oma relation type', new_oma_relation_type_path %>

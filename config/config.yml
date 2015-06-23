@@ -1,0 +1,20 @@
+development:
+ data_dir:
+   
+ uniprot_base_url:
+ 
+ websites_bbcf_dir:
+ 
+ bbcftools_dir:
+ 
+
+production:
+ data_dir:
+ 
+ uniprot_base_url:
+ 
+ websites_bbcf_dir:
+ 
+ bbcftools_dir:
+ 
+

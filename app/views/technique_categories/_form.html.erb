@@ -1,0 +1,17 @@
+<%= form_for(@technique_category) do |f| %>
+  <% if @technique_category.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@technique_category.errors.count, "error") %> prohibited this technique_category from being saved:</h2>
+
+      <ul>
+      <% @technique_category.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,17 @@
+<%= form_for(@pat_isoform) do |f| %>
+  <% if @pat_isoform.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@pat_isoform.errors.count, "error") %> prohibited this pat_isoform from being saved:</h2>
+
+      <ul>
+      <% @pat_isoform.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

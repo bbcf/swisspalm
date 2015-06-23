@@ -1,0 +1,17 @@
+<%= form_for(@interpro_match) do |f| %>
+  <% if @interpro_match.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@interpro_match.errors.count, "error") %> prohibited this interpro_match from being saved:</h2>
+
+      <ul>
+      <% @interpro_match.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

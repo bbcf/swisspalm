@@ -1,0 +1,17 @@
+<%= form_for(@protein_complex) do |f| %>
+  <% if @protein_complex.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@protein_complex.errors.count, "error") %> prohibited this protein_complex from being saved:</h2>
+
+      <ul>
+      <% @protein_complex.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

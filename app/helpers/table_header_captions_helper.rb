@@ -1,0 +1,2 @@
+module TableHeaderCaptionsHelper
+end

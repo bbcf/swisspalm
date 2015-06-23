@@ -1,0 +1,30 @@
+<li>
+<h2><span class='show_button'>+</span>References</h2>
+<div class='show_content hidden'>
+<% if @articles.size > 0 %>
+<table class='classic'>
+<head>
+<th>Reference #</th>
+<th>PMID</th>
+<th>Paper title</th>
+<th>Authors</th>
+<th>Year</th>
+</thead>
+<tbody>
+<% @articles.each_index do |i| %>
+<% article =  @articles[i] #(@studies[i].pmid) ? @articles[@h_articles[@studies[i].pmid]] : nil  %>
+<tr>	
+<td class='nowrap'>Ref. <%= i+1 %></th>
+<td><%= link_to(article.pmid, 'http://www.ncbi.nlm.nih.gov/pubmed/' + article.pmid.to_s) %></td>
+<td><%= article.title %></td>
+<td><%= article.authors %></td>
+<td><%= article.year %></td>
+</tr>
+<% end %>
+</tbody>
+</table>
+<% else %>
+<span style='font-style:italic'>No reference available.</span>
+<% end %>
+</div>
+</li>

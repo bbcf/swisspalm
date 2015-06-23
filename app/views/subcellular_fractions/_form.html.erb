@@ -1,0 +1,30 @@
+<%= form_for(@subcellular_fraction) do |f| %>
+  <% if @subcellular_fraction.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@subcellular_fraction.errors.count, "error") %> prohibited this subcellular_fraction from being saved:</h2>
+
+      <ul>
+      <% @subcellular_fraction.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <table>
+<tr>
+<td>Name</td>
+<td><%= f.text_field :name %></td>
+</tr>
+<tr>
+<td>Obsolete</td>
+<td><%= f.check_box :obsolete %></td>
+</tr>
+
+</table>
+
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

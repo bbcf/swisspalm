@@ -1,0 +1,28 @@
+<h1>Listing verb_types</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @verb_types.each do |verb_type| %>
+  <tr>
+    <td><%= verb_type.id %></td>
+	<td><%= verb_type.name %></td>
+	<td><%= verb_type.description %></td>
+    <td><%= link_to 'Show', verb_type %></td>
+    <td><%= link_to 'Edit', edit_verb_type_path(verb_type) %></td>
+    <td><%= link_to 'Destroy', verb_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Verb type', new_verb_type_path %>

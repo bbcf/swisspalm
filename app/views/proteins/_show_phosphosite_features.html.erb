@@ -1,0 +1,22 @@
+<li>
+<h2><span class='show_button'>-</span>PhosphoSite features</h2>
+<div class='show_content' >
+<% isoforms =  @isoforms.select{|i|  @h_isoforms_phosphosite[i.id]} %>
+
+<table class='classic'>
+<tr><th>Feature type</th>
+<% isoforms.each do |i| %>
+<th>Isoform <%= i.isoform %></th>
+<% end %>
+</tr>
+<% @h_phosphosite_features.each_key do |ft_id| %>
+<tr><td><%= @h_phosphosite_types[ft_id].name %></td>
+<% isoforms.each do |i| %>
+<td><%= (@h_phosphosite_features[ft_id][i.id]) ? @h_phosphosite_features[ft_id][i.id].map{|pf| pf.pos}.join(', ') : 'NA' %></td>
+<% end %>
+</tr>
+<% end %>
+</table>
+
+</div>
+</li>

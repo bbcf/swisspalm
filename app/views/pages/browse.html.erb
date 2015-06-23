@@ -1,0 +1,11 @@
+<h1>Browse</h1>
+
+<% t = [
+ link_to('Palmitome studies', studies_path(:large_scale => 1), {}),
+ link_to('Other studies', studies_path(:large_scale => 0), {}),
+ link_to('Hits and sites by organism',  organisms_path(), {}),
+ link_to('Curated hits and sites', hits_path(), {})
+]
+%>
+
+<%= raw t.join("<br/>") %>

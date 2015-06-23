@@ -1,0 +1,75 @@
+<table id='list_hits' class='protein_table'>
+<thead>
+  <tr>
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>Name</th>
+    <th>Gene names</th>
+<% @all_studies.each_index do |i| %>
+   <% if @h_hits[@all_studies[i].id] %>
+  <th><%= link_to i+1, study_path(@all_studies[i].id), {:title=>@all_studies[i].authors + ", " + @all_studies[i].year.to_s} %></th>
+   <% end %>
+<% end %>
+<th># of studies</th>
+<th># of annotated hits</th>
+<th># of annotated sites</th>
+</tr>
+</thead>
+<tbody>
+<% @proteins.each do |protein| %>
+  <tr>
+    <td><%= format_up_ac(protein) %></td>
+    <td><%= protein.up_id %></td>
+    <td><%= protein.description %></td>
+    <td><%= protein.ref_proteins.select{|e| e.source_type and e.source_type.name == 'gene_name'}.map{|e| e.value}.join(', ') %></td>
+<% count =0 %>
+<% @studies.each do |study| %>    
+    <td><% if (@h_hits[study.id][protein.id]) %>
+<% hits = @h_hits[study.id][protein.id] %>
+<% flag = 0 %>
+<%= raw hits.map{ |h|
+ hl = h.hit_list
+# flag=1
+(hl) ? (
+ (hl.confidence_level) ? hl.confidence_level.tag : ((hl.label!= '') ? hl.label : 'Yes')
+) : 'Paper'
+}.uniq.join(",<br/>")
+%>
+<%# count +=1 if flag==1 %>
+<% else %>
+-
+<% end %>
+</td>
+<% end %>
+<td><%= @h_study_by_prot[protein.id].keys.size %></td>
+<td><%= @annotated_hits.select{|e| e.protein_id == protein.id}.size %></td>
+<td><%= @annotated_sites.select{|e| e.hit.protein_id == protein.id}.size %></td>
+
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+// update form parameters
+$('#nber_studies').val(<%= params[:nber_studies] %>);
+
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+	"aaSorting": [[ <%= @h_hits.keys.size + 4 %>, "desc" ]],
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @proteins.size %>
+        })
+});
+
+//]]>
+</script>
+
+

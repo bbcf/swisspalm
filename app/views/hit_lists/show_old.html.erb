@@ -1,0 +1,77 @@
+<p id="notice"><%= notice %></p>
+
+<% study = @hit_list.study %>
+
+<h1>Hit list <%= format_study_name(study) %> - <%= (@hit_list.confidence_level) ? @hit_list.confidence_level.tag : @hit_list.label %></h1>
+<% hits = @hit_list.hits 
+first_hit = hits.first 
+protein_groups = @hit_list.protein_groups
+first_protein_group = (protein_groups) ? protein_groups.first : nil 
+%>
+
+<%= hits.size %> hits, <%= hits.map{|e| e.protein_id}.uniq.size %> proteins.
+
+<table id='list_hits' class='std_table'>
+<thead>
+  <tr>
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>Isoform</th>
+    <th>Gene names</th>
+    <% first_hit.hit_values.sort{|a, b| a.value_type <=> b.value_type}.each do |hit_value| %>
+     <th><%= (hit_value.value_type) ? hit_value.value_type.name : hit_value.value %></th>
+    <% end %>
+    <% if first_protein_group %>
+     <% first_protein_group.protein_group_values.sort{|a, b| a.value_type <=> b.value_type}.select{|e| e.value_type and e.value_type.display_by_default}.each do |protein_group_value| %>
+       <th><%= (protein_group_value.value_type) ? protein_group_value.value_type.name : 'NA' %></th>
+     <% end %>
+    <% end %>
+    </tr>    
+</thead>
+<tbody>
+<% @hit_list.hits.each do |hit| %>
+  <tr>
+    <td><%= link_to hit.protein.up_ac, protein_path(hit.protein.id)  %></td>
+    <td><%= hit.protein.up_id %></td>
+    <td><%= (hit.isoform) ? hit.isoform.isoform : 'NA' %></td>
+    <td><%= hit.protein.ref_proteins.select{|e| e.source_type and e.source_type.name == 'gene_name'}.map{|e| e.value}.join(", ") %></td>
+    <% hit.hit_values.sort{|a, b| a.value_type <=> b.value_type}.each do |hit_value| %>
+     <td><%= hit_value.value %></td>
+    <% end %> 
+    <% if hit.protein_groups.size > 0 %> 
+     <% hit.protein_groups.first.protein_group_values.sort{|a, b| a.value_type <=> b.value_type}.select{|e| e.value_type and e.value_type.display_by_default}.each do |protein_group_value| %>
+      <td>      
+       <% if protein_group_value.value_type.name.match(/\?$/) %>
+         <%= (protein_group_value.value == 'true') ? 'Yes' : 'No' %>
+       <% else %>
+        <%= protein_group_value.value %>
+       <% end %>
+      </td>
+     <% end %>
+    <% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<%= link_to 'Edit', edit_hit_list_path(@hit_list) %> |
+<%= link_to 'Back', hit_lists_path %>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_hits').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": 2000
+        })
+});
+
+
+//]]>
+</script>
+

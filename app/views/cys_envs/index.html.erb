@@ -1,0 +1,21 @@
+<h1>Listing cys_envs</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @cys_envs.each do |cys_env| %>
+  <tr>
+    <td><%= link_to 'Show', cys_env %></td>
+    <td><%= link_to 'Edit', edit_cys_env_path(cys_env) %></td>
+    <td><%= link_to 'Destroy', cys_env, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Cys env', new_cys_env_path %>

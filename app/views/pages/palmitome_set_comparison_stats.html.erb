@@ -1,0 +1,84 @@
+<table><tr><td>
+<b>Filters</b>
+<table><tr><td>
+<% l = @organisms.map{|o| [o.name, o.id]}.sort %>
+Reference organism
+</td><td>
+  <%= select_tag :ref_organism_id, options_for_select(l, params[:ref_organism_id]), {} %>
+</td></tr>
+<tr><td>
+Regroup by InterPro profile
+</td><td>
+<%= check_box_tag 'regroup_interpro', 1, params[:regroup_interpro], {} %>
+</td></tr>
+</table>
+</td><td>
+<%= link_to_function 'Update', 'update_list()' %> | <%= link_to_function 'Download', 'download_txt()' %>
+</td></tr></table>
+<br/>
+
+Study set A:
+
+<table class='classic'>
+<tr><th>Organism</th><th>Cell type</th><th>Studies</th></tr>
+<% count = 0 %>
+<% @h_studies.keys.sort{|a, b| @h_organisms[a].name <=>  @h_organisms[b].name}.each do |organism_id| %>
+ <% @h_studies[organism_id].keys.sort{|a, b| @h_cell_types[a].name <=>  @h_cell_types[b].name}.each do |cell_type_id| %>
+  <tr>
+<td><%= @h_organisms[organism_id].name %></td>
+<td><%= @h_cell_types[cell_type_id].name %></td>
+<td>
+   <%= raw @h_studies[organism_id][cell_type_id].sort.map{ |study|
+# study = @h_studies[organism_id][cell_type_id][i];
+  count+=1
+   "<sup>#{count}</sup>" + study_link(study) + "&nbsp;" +
+ link_to_function('', "add_study('" + add_to_session_study_path(study.id) + "', 'A')", :title => 'add to filter', :class=>'image_link', :style=>"background-image:url(" + image_path('plus-icon.png') +")")
+   }.join(", ") %>
+ </td></tr>
+ <% end %>
+<% end %>
+</table>
+
+Study set B:
+
+<table class='classic'>
+<tr><th>Organism</th><th>Cell type</th><th>Studies</th></tr>
+<% count = 0 %>
+<% @h_studies.keys.sort{|a, b| @h_organisms[a].name <=>  @h_organisms[b].name}.each do |organism_id| %>
+ <% @h_studies[organism_id].keys.sort{|a, b| @h_cell_types[a].name <=>  @h_cell_types[b].name}.each do |cell_type_id| %>
+  <tr>
+<td><%= @h_organisms[organism_id].name %></td>
+<td><%= @h_cell_types[cell_type_id].name %></td>
+<td>
+   <%= raw @h_studies[organism_id][cell_type_id].sort.map{ |study|
+# study = @h_studies[organism_id][cell_type_id][i];
+  count+=1
+   "<sup>#{count}</sup>" + study_link(study) + "&nbsp;" +
+ link_to_function('', "add_study('" + add_to_session_study_path(study.id) + "', 'B')", :title => 'add to filter', :class=>'image_link', :style=>"background-image:url(" + image_path('plus-icon.png') +")")
+   }.join(", ") %>
+ </td></tr>
+ <% end %>
+<% end %>
+</table>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function add_study(url, set){
+  $.ajax({
+                url: url,
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){
+                   $('#filter_list_studies').html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+//]]>
+</script>

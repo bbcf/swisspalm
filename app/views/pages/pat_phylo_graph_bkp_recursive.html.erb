@@ -1,0 +1,127 @@
+<% @include_js = javascript_include_tag 'vis/dist/vis.js' %>
+
+ <pre id="nodes"></pre>
+ <pre id="edges"></pre>
+<div id="mygraph"></div>
+
+<script type="text/javascript">
+
+<%= raw @json %>
+
+var init_node= all_nodes[0];
+nodes = new vis.DataSet();
+/*      nodes.subscribe('*', function () {
+        $('#nodes').html(toJSON(nodes.get()));
+      });*/
+      nodes.add([
+     init_node
+      ]);
+
+      // create an array with edges
+      edges = new vis.DataSet();
+/*      edges.subscribe('*', function () {
+        $('#edges').html(toJSON(edges.get()));
+      });*/
+//      edges.add([]);
+
+    // convenience method to stringify a JSON object
+    function toJSON (obj) {
+      return JSON.stringify(obj, null, 4);
+    }
+
+function sleep(millis, callback) {
+    setTimeout(function()
+            { callback(); }
+    , millis);
+}
+
+function add_els(new_nodes, new_edges){
+nodes.add(new_nodes);
+edges.add(new_edges);
+}
+
+function add_nodes_and_edges(cur_node, h_existing){
+
+var new_edges = [];
+var new_nodes = [];
+var h_new_node_ids = {};
+
+//ne_existing = h_existing
+//alert("length:" + Object.keys(h_existing));
+
+ for (var i =0; i<all_edges.length; i++){
+   if (all_edges[i]['from'] == cur_node.id && !h_existing[all_edges[i]['to']]){
+    new_edges.push(all_edges[i]);
+    h_new_node_ids[all_edges[i]['to']]=1
+   }
+   if (all_edges[i]['to'] == cur_node.id && !h_existing[all_edges[i]['from']]){
+     new_edges.push(all_edges[i]);
+     h_new_node_ids[all_edges[i]['from']]=1
+   }
+ }
+// alert(new_edges.length);
+ for (var i=0; i<all_nodes.length; i++){
+  if (h_new_node_ids[all_nodes[i].id] && !h_existing[all_nodes[i].id]){
+   new_nodes.push(all_nodes[i]);
+   h_existing[all_nodes[i].id]=1;
+  // alert("add: "  + all_nodes[i].id);
+  }
+ }
+//alert(new_nodes.length);
+
+//setTimeout(function(){nodes.add(new_nodes);edges.add(new_edges);}, 1000)
+nodes.add(new_nodes);
+edges.add(new_edges); 
+
+//new_nodes.push(tmp_nodes);
+//new_edges.push(tmp_edges);
+/*cur_node = null;
+if (k < new_nodes[j].length){
+ k++;
+ cur_node=new_nodes[j][k];
+}else{
+ j++;
+ if (j < new_nodes.length){
+  k=0;
+  cur_node= new_nodes[j][k];
+ }
+}
+}
+*/
+
+//add_nodes_and_edges(cur_node, h_existing);
+setTimeout(function(){for (var i=0 ; i< new_nodes.length;i++){
+ var cur_node = new_nodes[i]; add_nodes_and_edges(cur_node, h_existing)}}, 5000);
+
+
+//return {'new_nodes' : new_nodes, 'new_edges' : new_edges};
+}
+
+
+  // create a graph
+  var container = document.getElementById('mygraph');
+  var data= {
+    nodes: nodes,
+    edges: edges,
+  };
+  var options = {
+    width: '1400px',
+    height: '1000px'
+ };
+
+ 
+var graph = new vis.Graph(container, data, options);
+
+var cur_node = init_node;
+//nodes.add({id : 6, label : 'test' });
+var h_existing = {};
+h_existing[init_node.id] = 1;
+ add_nodes_and_edges(cur_node, h_existing);
+/*
+for (var i=0; i<h.new_nodes.length; i++){
+ nodes.add(h.new_nodes[i]);
+ edges.add(h.new_edges[i]);
+}
+*/
+
+</script>

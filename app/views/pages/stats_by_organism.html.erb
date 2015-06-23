@@ -1,0 +1,108 @@
+<% h = {:all => 'All proteins', :validated => 'Validated dataset'} %>
+ 
+<% [:all, :validated].each do |dataset| %>
+
+<span style='font-size:14px;font-weight:bold'><%= h[dataset] %></span>
+
+<table>
+<thead><tr><th>Type</th><th>List of fields</th><th>Link</th></<tr></thead>
+<tbody>
+<tr><td>
+General values
+</td><td>
+Organism name, UniProt tag, TaxID, # of articles, # of palmitome studies, # of targeted studies, Total # of proteins, # proteins in SwissProt / TrEMBL complement, Total # of hits, Total # of sites.	
+</td>
+<td><%= link_to 'Table', organisms_path(:dataset => dataset) %>
+</td>
+</tr><tr>
+<tr><td>
+Cysteines
+</td><td>
+Organism name, Total # of proteins, # of proteins with at least 1 predicted palmitoylation, # of proteins with at least 1 disulfide bond, # of cysteines, # of predicted palmitoylations, # of cysteines involved in disulfide bonds, # of cysteines involved in disulfide bonds and predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', cys_stats_organisms_path(:dataset => dataset) %>
+</td>
+</tr><tr><td>
+Proteins
+</td><td>
+Total # of proteins, # of proteins with at least 1 predicted palmitoylation, # of proteins with at least 1 disulfide bond
+</td><td>
+<%= link_to 'Table', prot_stats_organisms_path(:dataset => dataset) %>
+</td>
+</tr><tr>
+<td>
+Topology of cysteines (membrane proteins)
+</td><td>
+Organism name, <%= @topologies.join(", ") %>
+</td><td>
+<%= link_to 'Table', cys_topo_stats_organisms_path(:dataset => dataset) %>
+</td>
+</tr>
+<tr>
+<td>
+Subcellular location of proteins (from UniProt comments)
+</td><td>
+Subcellular locations, # of all proteins, # of palmitoylated proteins, % of palmitoylated proteins, # of proteins predicted to be palmitoylated, % of proteins predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', subcell_location_stats_organisms_path({:ref_organism_id => 1, :uniq => 1, :status => 0, :dataset => dataset}) %>
+</td>
+</tr>
+<tr>
+<td>
+UniProt domains
+</td><td>
+Domain, # of all proteins, # of palmitoylated proteins, % of palmitoylated proteins, # of proteins predicted to be palmitoylated, % of proteins predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', uniprot_domain_stats_organisms_path({:ref_organism_id => 1, :uniq => 1, :status => 0, :dataset => dataset}) %>
+</td>
+</tr>
+<tr>
+<td>
+PTMs (from UniProt features)
+</td><td>
+PTM, # of all proteins, # of palmitoylated proteins, % of palmitoylated proteins, # of proteins predicted to be palmitoylated, % of proteins predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', ptm_stats_organisms_path({:ref_organism_id => 1, :uniq => 1, :status => 0, :dataset => dataset}) %>
+</td>
+</tr>
+<tr>
+<td>
+PTMs (from Phosphosite)
+</td><td>
+PTM, # of all proteins, # of palmitoylated proteins, % of palmitoylated proteins, # of proteins predicted to be palmitoylated, % of proteins predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', phosphosite_stats_organisms_path({:ref_organism_id => 1, :uniq => 1, :status => 0, :dataset => dataset}) %>
+</td>
+</tr>
+<tr>
+<td>
+Complexes (Corum database)
+</td><td>
+CorumDB ID, # of all proteins, # of palmitoylated proteins, % of palmitoylated proteins, # of proteins predicted to be palmitoylated, % of proteins predicted to be palmitoylated
+</td><td>
+<%= link_to 'Table', protein_complex_stats_organisms_path({:ref_organism_id => 1, :uniq => 1, :status => 0, :dataset => dataset}) %>
+</td>
+</tr>
+<tr>
+<td>
+Comparison of palmitomes between 2 organisms : common proteins
+</td><td>
+Number of proteins in common for Organism 1 vs. Organism 2 
+</td><td>
+<%= link_to 'Table', common_prot_in_palmitomes_organisms_path(:dataset => dataset) %>
+</td>
+</tr>
+<tr>
+<td>
+Comparison of palmitomes between 2 organisms : proteins only present in one organism
+</td><td>
+Number of proteins differential for Organism 1 vs. Organism 2
+</td><td>
+<%= link_to 'Table', diff_prot_in_palmitomes_organisms_path(:dataset => dataset) %>
+</td>
+</tr>
+
+
+</table>
+<br/>
+<% end %>

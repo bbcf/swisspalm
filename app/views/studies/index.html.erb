@@ -1,0 +1,103 @@
+<% h_type_studies = {nil => 'all', '0' => 'targeted', '1' => 'palmitoyl-proteome'} %>
+
+<h1>Listing <%= h_type_studies[params[:large_scale]] %> studies</h1>
+
+<%= @studies.map{|e| e.pmid}.uniq.size %> articles and <%= @studies.size %> studies.
+
+<%= link_to('New Study', new_study_path({:large_scale => params[:large_scale]})) if admin? %>
+<br/>
+<%# link_to 'Summary', summary_studies_path() %>
+
+<% if @large_scale %>
+HC = High confidence, MC= Medium confidence, LC = Low confidence
+<% end %>
+
+<table id='list_studies' class='std_table'>
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Authors</th>
+    <th>Year</th>
+    <th>Organism</th>
+    <th>Cell type</th>
+    <th>Subcellular fraction</th>
+    <th>Techniques</th>
+    <th>In vitro</th>
+<% if !params[:large_scale] or @large_scale %>
+    <th># of hits</th>
+<% end %>
+    <th>Sites</th>
+    <th>Added by</th> 
+    <th></th>
+<% if admin? %>
+    <th></th>
+    <th></th>
+    <th></th>
+<% end %>
+  </tr>
+</thead>
+<tbody>
+<% @studies.each do |study| %>
+  <tr>
+    <td><%= study.id %></td>
+    <td>
+      <% if study.pmid %> 
+       <%= link_to (study.title != '') ? study.title : study.pmid, ('http://www.ncbi.nlm.nih.gov/pubmed/' + study.pmid.to_s) %>
+      <% else  %>
+       <%= study.name %>
+      <% end %>
+    </td>
+    <td><%= study.authors %></td>
+    <td><%= study.year  %></td>
+    <td><%= (study.organism) ? study.organism.name : 'NA' %></td>
+    <td><%= (study.cell_type) ? study.cell_type.name : 'NA' %></td>
+    <td><%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %></td>
+    <td><%= raw techniques = study.techniques.map{|e| e.name}; (techniques.size >0) ? techniques.join(', ') : 'NA' %></td>
+    <td><%= (study.in_vitro) ? 'Yes' : 'No' %></td>
+<% if !params[:large_scale] or @large_scale %>
+    <td>
+	<%= raw study.hit_lists.map{|hit_list| 
+	label = (hit_list.confidence_level_id) ? @h_confidence_levels[hit_list.confidence_level_id].tag : hit_list.label
+	label += ": " if label != ''
+	link_to (label + hit_list.nber_hits.to_s), hit_list_path(hit_list)  	
+	}.join("<br>") %>
+</td>
+<% end %>
+<td>
+<%= raw @h_hits_with_sites[study.id].map{|h| link_to(h.protein.up_ac + ((h.isoform) ? "-#{h.isoform.isoform}" : ''), protein_path(h.protein_id)) + " [#{h.sites.size}]" }.join(', ') if @h_hits_with_sites[study.id] %>
+<%# "[" + study.hits.select{|h| h.sites.size > 0}.map{|h| h.sites.size}.join(", ") + "]" %>
+</td>
+    <td><%= (study.user_id) ? study.user.initials : 'Auto' %></td>
+    <td><%= link_to 'Show', study %></td>
+<% if admin? %>
+    <td><%= link_to 'Edit', edit_study_path(study) %></td>
+    <td><%= link_to 'New Hit list', new_study_hit_list_path(study) %></td>
+    <td><% if superadmin? %><%= link_to 'Destroy', study, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+<% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_studies').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+        "iDisplayLength": 200
+	})	
+});
+
+
+//]]>
+</script>
+
+

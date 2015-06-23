@@ -1,0 +1,13 @@
+<table><tr>
+<th></th>
+<%= raw @headers.map{|oid| "<th>" + @h_organisms[oid].name + "</th>"}.join("") %>
+</tr>
+<% @headers.each do |oid| %>
+<tr>
+<td><%= @h_organisms[oid].name %></td>
+<% @headers.each do |oid2| %>
+<td><%= @h_common[oid][oid2].size if @h_common[oid][oid2] %></td>
+<% end %>
+</tr>
+<% end %>
+</table>

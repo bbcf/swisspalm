@@ -1,0 +1,50 @@
+<div id='select_cys'>
+<h2>Select cysteins</h2>
+
+[ Color code: <span class='hc'>High confidence</span>,
+<span class='mc'>Medium confidence</span>,
+<span class='lc'>Low confidence</span>. ]
+
+<br/>
+<% session[:proteins].each_key do |protein_id| %>
+ <h3><%= @h_proteins[protein_id].up_id %></h3>
+
+<% @h_pos_ali = @h_data[protein_id][:h_pos_ali]
+   @pos_ali = @h_data[protein_id][:pos_ali]	
+   @h_pred = @h_data[protein_id][:h_pred]
+   @main_iso = @h_data[protein_id][:main_iso] %>
+
+<% if @h_pred[@h_pred.keys.first].keys.size > 0 %>
+
+<table>
+<thead>
+<tr>
+<th>Pos in alignment</th>
+<%= raw @pos_ali.map{|pos| "<th>#{pos}</th>"}.join('') %>
+</tr>
+</thead>
+<tbody>
+<% @h_pred.keys.sort.each do |iso| %>
+<tr>
+<td>Isoform <%= iso %><br/><%= raw (iso == @main_iso) ? '[Main isoform]' : '' %></td>
+<% @pos_ali.each do |ali_pos| %>
+<% pos = @h_pos_ali[iso][ali_pos] %>
+
+<td><% if @h_pred[iso][pos] %>
+<span class=nowrap><%= check_box_tag 'prediction_ids', @h_pred[iso][pos][0].id, session[:predictions][@h_pred[iso][pos][0].id], {} %><%= raw "<span class='#{@h_pred[iso][pos][1]}'>Cys<sup>#{pos}</sup></span><br/><span class='small'>#{@h_pred[iso][pos][0].cp_score}</span></span>" if pos %>
+
+<% end %>
+</td>
+<% end %>
+</tr>
+<% end %>
+</tbody>
+</table>
+
+<% else %>
+Cys environments not availablen 
+<% end %>
+
+
+<% end %>
+</div>

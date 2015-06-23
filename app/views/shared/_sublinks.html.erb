@@ -1,0 +1,66 @@
+<% h = {
+	:home => [
+        link_to('Search proteins', root_path, {:class=>'subsection_tab' + ((controller_name == 'proteins') ? ' sel_tab2' : '')}),
+#	link_to('What is palmitoylation?', what_path, {:class=>'subsection_tab' + ((action_name == 'what') ? ' sel_tab2' : '')}),
+	link_to('Palmitoylation literature', pubmed_path, {:class=>'subsection_tab' + ((action_name == 'pubmed') ? ' sel_tab2' : '')}),
+        ],
+	:palmitomes => [
+        link_to('Palmitome studies', studies_path({:large_scale => 1}), {:class=>'subsection_tab' + ((controller_name == 'studies') ? ' sel_tab2' : '')}),
+	link_to('Comparison', palmitome_comparison_path, {:class=>'subsection_tab' + ((action_name == 'palmitome_comparison') ? ' sel_tab2' : '')})
+	],
+	:annotations => [	
+        link_to('Annotated hits and sites', hits_path, {:class=>'subsection_tab' + ((controller_name == 'hits') ? ' sel_tab2' : '')}),
+        link_to('Targeted studies', studies_path({:large_scale => 0}), {:class=>'subsection_tab' + ((controller_name == 'studies') ? ' sel_tab2' : '')})
+	],
+	:pats_and_apts => [
+ 	link_to('Summary', pat_apt_summary_path, {:class=>'subsection_tab' + ((action_name == 'pat_apt_summary') ? ' sel_tab2' : '')}),
+	],
+	:stats => [
+	link_to('By organism', stats_by_organism_path, {:class => 'subsection_tab' + ((action_name == 'stats_by_organism') ? ' sel_tab2' : '')}),
+	link_to('Compared palmitomes', palmitome_stats_path, {:class => 'subsection_tab' + ((action_name == 'palmitome_stats') ? ' sel_tab2' : '')})
+	],
+	:admin => [
+	link_to('Curation', curation_path(), {:class=>'subsection_tab' + ((controller_name == 'sites') ? ' sel_tab' : '')})
+	]		
+	}
+ %>
+
+<% h2 ={
+	:pats_and_apts => [
+          link_to('PAT homology graph', pat_graph_path, {:class=>'subsection_tab' + ((action_name == 'pat_graph') ? ' sel_tab2' : '')}),
+          link_to('PATs by homology group', pat_by_homology_group_path, {:class=>'subsection_tab' + ((action_name == 'pat_by_homology_group') ? ' sel_tab2' : '')})
+        ]
+} %>
+
+
+<% h3 = {"admin" => [
+
+]} %>
+
+<% h4 = {} %>
+
+
+<% t = [] %>
+
+<% if  h[session[:menu]] %>
+<% h[session[:menu]].each do |e| %>
+   <% t.push(e) %>
+<% end %>
+<% if  lab_user? and h2[session[:menu]] %>
+ <% h2[session[:menu]].each do |e| %>
+   <% t.push(e) %>
+<% end %>
+<% end %>
+	
+
+<%#  t.push(t2) if lab_user? %>
+
+
+<%# t.push(t3) if admin? %>
+
+
+
+<%= raw t.flatten.join(' ') %>
+
+<% end %>
+ 

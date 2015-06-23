@@ -1,0 +1,64 @@
+<%= @hits.size %> hits found.
+
+<table id ='list_hits'>
+<thead>
+  <tr>
+    <th>Hit ID</th>
+    <th>Organism</th>
+    <th>Protein</th>
+    <th>Isoform</th>
+    <th>Study</th>
+    <th>Organism</th>
+    <th>Cell type</th>
+    <th>Subcellular fraction</th>
+    <th>List of sites</th>
+    <th>Protein hits in palmitome studies</th>
+  </tr>
+</thead>
+<tbody>
+<% @hits.each do |hit| %>
+  <tr>
+<% protein = hit.protein %>
+<% study = hit.study %>
+<td>SPalmH:<%= hit.id %></td>
+<td><%= protein.organism.name %></td>
+<td><%= link_to protein.up_id, protein_path(protein) %></td>
+<td><%= (hit.isoform_id) ? hit.isoform.isoform : '-'  %></td>
+<td><%= study.authors + " (#{study.year})" %></td>
+<td><%= (study.organism) ? study.organism.name : 'NA' %></td>
+<td><%= (study.cell_type) ? study.cell_type.name : 'NA' %></td>
+<td><%= (study.subcellular_fraction) ? study.subcellular_fraction.name : 'NA' %></td>
+<td><table><%= raw hit.sites.sort{|a, b| a.pos <=> b.pos}.map{|s| 
+"<tr><td>" + 
+["SPalms:#{s.id}", s.pos, 
+((s.organism) ? s.organism.name : 'NA'),
+((s.reactions.size > 0) ? s.reactions.map{|r| link_to(r.protein.up_ac, protein_path(r.protein))}.join(", ") : 'NA') 
+].join("</td><td>") + 
+"</td></tr>"
+}.join("") %>
+</table></td>
+<td><%= protein.hits.select{|h| h.study.large_scale == true}.size %> <%# link_to 'See details', hits_path() %></td>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_sites').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrtp',
+        "iDisplayLength": <%= @hits.size %>
+        })
+});
+
+
+//]]>
+</script>

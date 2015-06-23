@@ -1,0 +1,21 @@
+<h1>Listing uniprot_statuses</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @uniprot_statuses.each do |uniprot_status| %>
+  <tr>
+    <td><%= link_to 'Show', uniprot_status %></td>
+    <td><%= link_to 'Edit', edit_uniprot_status_path(uniprot_status) %></td>
+    <td><%= link_to 'Destroy', uniprot_status, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Uniprot status', new_uniprot_status_path %>

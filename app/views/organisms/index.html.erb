@@ -1,0 +1,84 @@
+<h1>Summary by organism <%= (@dataset == 'validated') ? ' - Validated dataset of proteins' : ' - All proteins' %></h1>
+<% h_cond = (@dataset == 'validated') ? {:validated_dataset => true } : {} %>
+<%= link_to('New Organism', new_organism_path) if admin? %>
+
+<table id='list_organisms' class='std_table'>
+<thead>
+  <tr>
+<% if admin? %>
+    <th>ID</th>
+<% end %>
+    <th>Name</th>
+<% if admin? %>
+    <th>UniProt tag</th>
+    <th>TaxID</th>
+<% end %>
+<th># of articles</th>
+<th># of palmitome studies</th>
+<th># of targeted studies</th>
+<th>Total # of proteins</th>
+<th># proteins in SwissProt / TrEMBL complement</th>
+<th>Total # of hits</th>
+<th>Total # of sites</th>
+    <th></th>
+    <th></th>
+<% if admin? %>
+    <th></th>
+    <th></th>
+<% end %>
+  </tr>
+</thead>
+<tbody>
+<% @organisms.each do |organism| %>
+  <tr>
+<% if admin? %>
+    <td><%= organism.id %></td>
+<% end %>	
+    <td><%= organism.name %></td>
+<% if admin? %>
+    <td><%= organism.up_tag %></td>
+    <td><%= organism.taxid %></td>
+<% end %>
+<td><%= studies = organism.studies; studies.map{|e| e.pmid}.uniq.size %></td>
+<td><%= studies = organism.studies; nber_palmitome_studies = studies.select{|e| e.large_scale}.size %></td>
+<td><%= studies = organism.studies; studies.select{|e| !e.large_scale}.size %></td>
+<%# h_proteins = {}; list_hits = studies.select{|s| s.hidden != true}.map{|s| hits = s.hits; hits.map{|h| h_proteins[h.protein_id]=1}; hits}.flatten %>
+<td><%= Protein.count(:conditions => {:has_hits_public => true, :organism_id => organism.id}.merge(h_cond)) %>/<%= Protein.count(:conditions => {:organism_id => organism.id}) %></td>
+<td><%= Protein.count(:conditions => {:has_hits_public => true, :organism_id => organism.id, :trembl => false}.merge(h_cond)) %>/<%= Protein.count(:conditions => {:has_hits_public => true, :organism_id => organism.id, :trembl => true}.merge(h_cond)) %></td>
+<td><%= hits = Hit.find(:all, :joins => 'join proteins on (proteins.id = hits.protein_id)', :conditions => {:proteins => {:has_hits_public => true, :organism_id => organism.id}}); hits.size %></td>
+<td><%= hits.map{|hit| hit.sites}.flatten.size %></td>
+<td><%= link_to 'Comparison of palmitomes', palmitome_comparison_organism_path(organism) if nber_palmitome_studies > 0 %></td>
+<td>
+<% if lab_user? %>
+<%= link_to 'GO term summary', go_term_summary_organism_path({:id => organism.id, :dataset => @dataset})  if organism.id < 3 %>
+<% end %>
+</td>
+<!--   <td><%= link_to 'Show', organism %></td>-->
+<% if admin? %>
+    <td><%= link_to 'Edit', edit_organism_path(organism) %></td>
+    <td><% if superadmin? %><%= link_to 'Destroy', organism, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+<% end %>
+  </tr>
+<% end %>
+</tbody>
+</table>
+
+<br />
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_organisms').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+        "iDisplayLength": <%= @organisms.size %>
+        })
+});
+
+
+//]]>
+</script>

@@ -1,0 +1,21 @@
+<h1>Listing hit_values</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @hit_values.each do |hit_value| %>
+  <tr>
+    <td><%= link_to 'Show', hit_value %></td>
+    <td><%= link_to 'Edit', edit_hit_value_path(hit_value) %></td>
+    <td><%= link_to 'Destroy', hit_value, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hit value', new_hit_value_path %>

@@ -1,0 +1,69 @@
+<div>You can write one or several of these items separated by "and": 
+<ul>
+<li>Free text (UniProt ID, UniProt AC, UniProt description, gene names, other protein IDs [Refseq, IPI, RGD, Pombase, TAIR, MGI, EuPathDB])</li>
+<li>One of the following tags (tags followed by ":" require an input)</li>
+</ul>
+
+<table class='helper_table'><tr><td>
+<div class='helper_button'>All</div>
+</td><td>All proteins</td></tr>
+<tr><td>
+<div class='helper_button'>Reviewed</div>
+</td><td>Reviewed proteins in UniProt</td></tr>
+<tr><td>
+<div class='helper_button'>Gene:</div>
+</td><td>Gene names in UniProt</td></tr>
+<%# if lab_user? %>
+<tr><td>
+<div class='helper_button'>Motif:</div>
+</td><td>
+Searches proteins having a motif in one of its protein sequences (use <%= link_to "standard ASCII regular expression format", "http://en.wikipedia.org/wiki/Regular_expression" %>, e.g. L.C.E)</td></tr>
+<tr><td>
+<div class='helper_button'>GO:</div>
+</td><td>
+Searches proteins having a specific GO term
+</td></tr>
+<tr><td>
+<div class='helper_button'>Subcellular:</div>
+</td><td>
+Search proteins located in a given subcellular compartment
+</td></tr>
+<%# end %>
+</table>
+
+For more complex queries with UniProt annotations, go on <%= link_to "http://uniprot.org", "http://uniprot.org" %>, and submit below the list of UniProt identifiers.
+</div>
+<script type="text/javascript">
+    //<![CDATA[
+
+//$.each( $( "#search_helper_container" ).children(), function( i, val ) {
+$("div.helper_button").click(function() {
+var new_text = $(this).html();
+var v = $("#ref_palm_value").val().trim();
+var t = v.split(/\s+and\s+/);
+if (t.length==1 && t[0].trim() == ''){
+t = [];
+}
+var flag=0;
+var i =0
+while(i < t.length && flag==0){
+ if (t[i] == new_text){
+  flag=1;
+ }
+ i++;
+}
+if (flag==0){
+ t.push(new_text)
+}
+
+$("#ref_palm_value").val(t.join(" and "));
+$("#search_help_main").click();
+$("#search_help").click();
+$("#ref_palm_value").focus()
+
+});
+
+//});
+
+//]]>
+</script>

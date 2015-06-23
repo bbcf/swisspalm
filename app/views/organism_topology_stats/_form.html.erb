@@ -1,0 +1,17 @@
+<%= form_for(@organism_topology_stat) do |f| %>
+  <% if @organism_topology_stat.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organism_topology_stat.errors.count, "error") %> prohibited this organism_topology_stat from being saved:</h2>
+
+      <ul>
+      <% @organism_topology_stat.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

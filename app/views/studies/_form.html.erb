@@ -1,0 +1,149 @@
+<%= form_for(@study) do |f| %>
+  <% if @study.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@study.errors.count, "error") %> prohibited this study from being saved:</h2>
+
+      <ul>
+      <% @study.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<!--<tr><td>Parent study</td><td>
+<% l = Study.last(10).map{|e| [e.pmid.to_s + " : " + e.title, e.id]} %>
+<% l.unshift(['NA', '']) %>
+<%= f.select :parent_id, l, {:on_change => 'upd()'} %>
+</td></tr>-->
+<tr>
+<td>PMID</td><td><%= f.text_field :pmid %> <%= link_to_function "Load article", 'load_article()' %></td>
+</tr>
+<tr>
+<td>Title</td><td><%= f.text_field :title, :readonly => true, :size => 100 %></td>
+</tr>
+<tr>
+<td>Authors</td><td><%= f.text_field :authors, :readonly => true %></td>
+</tr>
+<tr>
+<% l = (2000 .. 2014).to_a.map{|e| [e,e]} %>
+<td>Year</td><td><%= f.text_field :year, :readonly => true %></td>
+</tr>
+<tr>
+<% l = Organism.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', nil]) %>
+<td>Organism</td><td><%= f.select :organism_id, l %></td>
+</tr>
+<tr>
+<% l = CellType.all.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', nil]) %>
+<td>Cell type</td><td><%= f.select :cell_type_id, l %></td>
+</tr>
+<tr>
+<% l = SubcellularFraction.all.select{|e| !e.obsolete}.map{|e| [e.name, e.id]}.sort %>
+<% l.unshift(['NA', nil]) %>
+<td>Subcellular fraction</td><td><%= f.select :subcellular_fraction_id, l %></td>
+</tr>
+<tr>
+<td>Techniques</td>
+<td>
+<table>
+<% Technique.all.select{|e| (@study.large_scale== false or e.large_scale == true)}.sort{|a,b| a.name <=> b.name}.each do |t| %>
+<tr><td><%= check_box_tag "study[technique_ids][]", t.id, @study.techniques.include?(t) %></td><td><%= raw t.name %></td></tr>
+<% end %>
+</table>
+</td>
+</tr>
+ <tr>
+<td>Large  scale</td><td><%= f.check_box :large_scale %></td>
+</tr>
+<tr>
+<td>In vitro</td><td><%= f.check_box :in_vitro %></td>
+</tr>
+<tr>
+<td>Internal study (not public)</td><td><%= f.check_box :hidden %></td>
+</tr>
+<tr>
+<td>Name (for internal studies)</td><td><%= f.text_field :name %></td>
+</tr>
+<!--
+<tr>
+<td>List of hits</td>
+<td>
+<table id='list_of_hits'>
+<thead>
+<th>Protein</th>
+<th>Isoform</th>
+<th>Sites</th>
+</thead>
+<tbody>
+</tbody>
+</table>
+
+</td>
+</tr>
+-->
+</table>
+
+
+<!--
+<%= link_to_function 'Add a hit', "add_hit('list_of_hits')" %>
+-->
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function load_article(){
+	$.ajax({
+                url: "<%= load_article_studies_path %>",
+                type: "get",
+                dataType: "json",
+                data: {"pmid" : $("#study_pmid").val()},
+                success: function(h){
+	         var ids = ['year', 'title', 'authors'];
+                 for(var i=0; i< ids.length ;i++){
+                       var o = document.getElementById("study_" + ids[i]);
+   			o.value = h[ids[i]];
+                  }
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+function add_hit(table_id){
+
+var table = $("#" + table_id);
+
+//alert(table.prop('rows').length);
+
+var item_num = table.prop('rows').length -1;
+
+var fields = [
+ {
+  id : 'study_hits_' + item_num + '_protein_id',
+  name : 'study[hits][' + item_num + '][protein_id]',
+  type : 'input',
+  'sub-type'  : 'text',
+  autocomplete : {
+	fun : '<%= autocomplete_proteins_path %>',
+	char_lenght : 3
+  }
+  	
+ }
+];
+
+//add_item(table, fields);
+}
+
+
+//]]>
+</script>

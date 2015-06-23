@@ -1,0 +1,21 @@
+<h1>Listing topologies</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @topologies.each do |topology| %>
+  <tr>
+    <td><%= link_to 'Show', topology %></td>
+    <td><%= link_to 'Edit', edit_topology_path(topology) %></td>
+    <td><%= link_to 'Destroy', topology, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Topology', new_topology_path %>

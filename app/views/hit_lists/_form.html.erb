@@ -1,0 +1,50 @@
+<%= form_for([@study, @hit_list], :html => {:multipart => true}) do |f| %>
+  <% if @hit_list.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@hit_list.errors.count, "error") %> prohibited this hit_list from being saved:</h2>
+
+      <ul>
+      <% @hit_list.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<table>
+<tr>
+<td>Label</td>
+<td><%= f.text_field :label %></td>
+</tr>
+<tr>
+ <td>Confidence level</td>
+<% l = ConfidenceLevel.all.map{|e| [e.name, e.id]} %>
+<% l.unshift(['NA', nil]) %>
+<td><%= f.select :confidence_level_id, l %></td>
+</tr>
+<tr>
+<td>File</td>
+<td><%= f.file_field :file %></td>
+</tr>
+<!--<tr>
+<td>Internal study MS data file - requires treatment and dealing with protein groups</td>
+<td><%# f.check_box :internal_study %></td>
+</tr>
+-->
+<tr>
+<td>File type</td>
+<% l = FileType.all.map{|o| [o.name, o.id]} %>
+<td><%= f.select :file_type_id, l %></td>
+</tr>
+<tr>
+<td>Identifier in first column</td>
+<% l = [5, 6, 1, 3, 9, 10].map{|e| o = SourceType.find(e); [o.description, o.name]} %>
+<% l.push(['Isoform identifier', 'isoform_identifier']) %>
+<td><%= f.select :identifier_type, l %></td>
+</tr>
+</table>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

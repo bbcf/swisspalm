@@ -1,0 +1,21 @@
+<h1>Listing oma_pairs</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @oma_pairs.each do |oma_pair| %>
+  <tr>
+    <td><%= link_to 'Show', oma_pair %></td>
+    <td><%= link_to 'Edit', edit_oma_pair_path(oma_pair) %></td>
+    <td><%= link_to 'Destroy', oma_pair, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Oma pair', new_oma_pair_path %>

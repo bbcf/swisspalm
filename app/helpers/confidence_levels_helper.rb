@@ -1,0 +1,2 @@
+module ConfidenceLevelsHelper
+end

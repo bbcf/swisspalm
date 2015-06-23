@@ -1,0 +1,33 @@
+<h1>Listing hits</h1>
+
+<table>
+  <tr>
+    <th>UniProt AC</th>
+    <th>UniProt ID</th>
+    <th>Name</th>
+<% @studies.each_index do |i| %>
+  <th><%= i %></th>
+<% end %>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @proteins.each do |protein| %>
+  <tr>
+    <td><%= protein.up_ac %></td>
+    <td><%= protein.up_id %></td>
+    <td><%= protein.name %></td>
+<% @studies.each do |study| %>
+    <td><%= (h_hits[study.id][protein.up_id]) ? 'Yes' : '-' %></td>
+<% end %>
+    <td><%= link_to 'Show', hit %></td>
+    <td><%= link_to 'Edit', edit_hit_path(hit) %></td>
+    <td><% if superadmin? %><%= link_to 'Destroy', hit, method: :delete, data: { confirm: 'Are you sure?' } %><% end %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Hit', new_hit_path %>

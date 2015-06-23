@@ -1,0 +1,49 @@
+<table id='stats' class='jquery'>
+<thead>
+<tr>
+<th>Complex</th>
+<th># of all proteins</th>
+<th># of palmitoylated proteins</th>
+<th>% of palmitoylated proteins</th>
+<th># of proteins predicted to be palmitoylated</th>
+<th>% of proteins predicted to be palmitoylated</th>
+</tr></thead>
+<tbody>
+<% @protein_complexes.each do |pc| %>
+<tr>
+<% nber_palm = (@dataset == 'validated') ? pc.nber_prot_validated_dataset : pc.nber_prot_palm %>
+<td><%= pc.name %></td>
+<td><%= pc.nber_prot %></td>
+<td><%= nber_palm %></td>
+<td><%= nber_palm.to_f * 100 / pc.nber_prot %></td>
+<td><%= pc.nber_prot_predicted %></td>
+<td><%= pc.nber_prot_predicted.to_f * 100 / pc.nber_prot %></td>
+</tr>
+<% end %>
+</tbody></table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#stats').dataTable( {
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+	"aoColumns": [
+null,
+{ "sType": 'numeric' },
+{ "sType": 'numeric' },
+{ "sType": 'numeric' },
+{ "sType": 'numeric' },
+{ "sType": 'numeric' }],
+        "sDom": 'Wfrt',
+        "iDisplayLength": <%= @protein_complexes.size %>
+        })
+});
+
+
+//]]>
+</script>

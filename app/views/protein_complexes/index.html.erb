@@ -1,0 +1,21 @@
+<h1>Listing protein_complexes</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @protein_complexes.each do |protein_complex| %>
+  <tr>
+    <td><%= link_to 'Show', protein_complex %></td>
+    <td><%= link_to 'Edit', edit_protein_complex_path(protein_complex) %></td>
+    <td><%= link_to 'Destroy', protein_complex, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Protein complex', new_protein_complex_path %>

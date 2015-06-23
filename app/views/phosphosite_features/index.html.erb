@@ -1,0 +1,21 @@
+<h1>Listing phosphosite_features</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @phosphosite_features.each do |phosphosite_feature| %>
+  <tr>
+    <td><%= link_to 'Show', phosphosite_feature %></td>
+    <td><%= link_to 'Edit', edit_phosphosite_feature_path(phosphosite_feature) %></td>
+    <td><%= link_to 'Destroy', phosphosite_feature, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Phosphosite feature', new_phosphosite_feature_path %>

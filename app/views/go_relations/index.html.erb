@@ -1,0 +1,21 @@
+<h1>Listing go_relations</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @go_relations.each do |go_relation| %>
+  <tr>
+    <td><%= link_to 'Show', go_relation %></td>
+    <td><%= link_to 'Edit', edit_go_relation_path(go_relation) %></td>
+    <td><%= link_to 'Destroy', go_relation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Go relation', new_go_relation_path %>

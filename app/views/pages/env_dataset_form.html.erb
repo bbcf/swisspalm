@@ -1,0 +1,22 @@
+<%= form_tag('/pages/compute_env_dataset') do %>
+ 
+<table>
+<tr>
+<%# l = Organism.all.sort{|a, b| a.name <=> b.name}.map{|o| [o.name, o.id]} %>
+<td>Protein list (AC)</td><td><%= text_area_tag 'protein_list', '', {:cols => 25, :rows => 20} %></td>
+</tr>
+<tr>
+<% l = [['Main isoform only', 'main'], ['Only selected isoform', 'select'], ['All isoforms', 'all']] %>
+<td>Isoforms</td><td><%= select_tag options_for_select(l, 'main') %></td>
+</tr>
+<tr>
+<% l = (5 .. 50).to_a.map{|e| [e, e]} %>
+<td>Window size (upstream and downstream cystein)</td><td><%= select_tag 'window_size', options_for_select(l, 10) %></td>
+</tr>
+
+</table>
+
+  <div class="actions">
+    <%= submit_tag %>
+  </div>
+<% end %>

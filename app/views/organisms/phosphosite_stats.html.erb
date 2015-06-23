@@ -1,0 +1,53 @@
+<h2>Stats on Phoshosite PTMs<%= (@dataset == 'validated') ? ' - Validated dataset of proteins' : ' - All proteins' %></h2>
+
+<table><tr>
+<td>Organism</td>
+<% l = Organism.all.map{|e| [e.name, e.id]}.sort %>
+<td><%= select_tag :ref_organism_id, options_for_select(l, params[:ref_organism_id]), {}  %></td>
+</tr><tr>
+<td>Counts for each subcellular location (no combinations)</td>
+<td><%= check_box_tag :uniq, 1, params[:uniq], {}   %></td>
+</tr></table>
+
+<%= link_to_function 'Update', 'update_list()' %> | <%= link_to_function 'Download', 'download_txt()' %>
+
+
+<div id='div_stats'>
+<%= render :partial => 'ptm_stats' %>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function download_txt(){
+$('#loading').toggleClass('hidden');
+window.location.href='<%= phosphosite_stats_organisms_path %>?format=txt&ref_organism_id=' +  $('#ref_organism_id').val() + '&status=' + $('#status').val() + '&uniq=' + (($('#uniq').is(':checked')) ? '1' : '0') + '<%= '&dataset=validated' if @dataset == 'validated' %>';
+}
+
+function update_list(){
+var p = 'partial=1&ref_organism_id=' + $('#ref_organism_id').val() + '&status=' + $('#status').val() + '&uniq=' + (($('#uniq').is(':checked')) ? '1' : '0');
+	
+$.ajax({
+                url: '<%= phosphosite_stats_organisms_path %>?' + p,
+                type: "get",
+                dataType: "html",
+                data: {},
+                beforeSend: function( xhr ) {
+                  $('#loading').toggleClass('hidden');
+                },
+                success: function(returnData){
+                    var o = $('#div_stats');
+                    o.html(returnData);
+                    $('#loading').toggleClass('hidden');
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+
+}
+
+
+
+//]]>
+</script>

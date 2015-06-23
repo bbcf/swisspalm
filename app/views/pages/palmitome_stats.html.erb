@@ -1,0 +1,70 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Statistics on compared palmitomes</h1>
+
+<table><tr><td>
+<b>Filters</b>
+<table><tr><td>
+<% l = @organisms.map{|o| [o.name, o.id]}.sort %>
+Reference organism
+</td><td>
+  <%= select_tag :ref_organism_id, options_for_select(l, params[:ref_organism_id]), {} %>
+</td></tr>
+</table>
+</td><td>
+<%= link_to_function 'Update', 'update_list()' %> | <%= link_to_function 'Download', 'download_txt()' %>
+</td></tr></table>
+<br/>
+
+<div id = 'div_list_hits'>
+<%= render :partial => 'palmitome_stats' %>
+</div>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+function download_txt(){
+$('#loading').toggleClass('hidden');
+window.location.href='<%= palmitome_stats_path %>?format=txt&ref_organism_id=' +  $('#ref_organism_id').val();
+}
+
+function update_list(){
+var p = 'partial=1&ref_organism_id=' +  $('#ref_organism_id').val() + '&nber_studies=' + $('#nber_studies').val();
+
+ $.ajax({
+                url: '<%= palmitome_stats_path %>?' + p,
+                type: "get",
+                dataType: "html",
+                data: {},
+		beforeSend: function( xhr ) {
+		  $('#loading').toggleClass('hidden');
+		},
+                success: function(returnData){
+                    var o = $('#div_list_hits');
+		    o.html(returnData);
+		    $('#loading').toggleClass('hidden');                     
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+
+}
+
+function add_study(url){
+  $.ajax({
+                url: url,
+                type: "get",
+                dataType: "html",
+                data: {},
+                success: function(returnData){  
+                   $('#filter_list_studies').html(returnData);
+                },
+                error: function(e){
+                  alert(e);
+                   }
+            });
+}
+
+//]]>
+</script>

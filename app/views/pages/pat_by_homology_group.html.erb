@@ -1,0 +1,47 @@
+<h1>All known and hypothetical PATs by homology group</h1>
+
+In the following tables are reported all PATs found by BLASTing the annotated PAT proteins. Annotated proteins are defined as been reported in literature or corresponding to entries tagged with the GO term: protein-cysteine S-palmitoyltransferase activity [0019706].
+
+
+<% @final_res.keys.sort.each do |homology_group| %>
+ <% table =  @final_res[homology_group] %>
+ <h2>Group <%= homology_group %></h2> <%= link_to 'PHYLIP NJ tree', pat_phylip_nj_tree_path({:group => homology_group}) %>
+   <table id='list_<%= homology_group %>' class='protein_table'><thead><tr>
+   <% table[0].each do |e| %>
+    <th><%= e %></th>
+   <% end %>
+   </tr>
+   </thead><tbody>
+   <% (1 .. table.size-1).to_a.each do |j| %> 
+    <tr>
+    <% table[j].each do |e| %>
+     <td><%= raw e %></td>
+    <% end %>
+    </tr>
+   <% end %>
+   </tbody>
+   </table>
+
+<script type="text/javascript">
+    //<![CDATA[
+
+jQuery(document).ready(function() {
+    /* Build the DataTable with third column using our custom sort functions */
+    var oTable = jQuery('#list_<%= homology_group %>').dataTable({
+        "oLanguage": {
+            "sSearch": "Search all columns:"
+        },
+        "sDom": 'Wfrt',
+	"aaSorting": [[ 2, "asc" ]],
+        "iDisplayLength": <%= table.size %>
+        })
+});
+
+//]]>
+</script>
+
+<br/><br/>
+
+<% end %>
+
+
